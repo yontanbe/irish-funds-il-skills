@@ -80,12 +80,14 @@ def score_risk(answers: dict, questionnaire: dict) -> dict:
         "profile_id": profile["id"],
         "profile_name": profile["name"],
         "equity_pct": equity_pct,
-        "tech_pct_of_equity": profile["tech_pct_of_equity"],
         "warnings": warnings,
     }
 
 
 # ---------- בניית תיק ----------
+
+UNIT = 1200  # משקלי הרגליים נמדדים ב-1/12 אחוז, כדי ששלישים וחצאים יהיו מספרים שלמים
+
 
 def _template(portfolios: dict, template_id: str) -> dict:
     for t in portfolios["templates"]:
@@ -102,98 +104,135 @@ def _option(template: dict, options: dict, key: str) -> str:
     return value
 
 
-def _equity_legs(template: dict, tech_pct: int, options: dict) -> tuple[list, list]:
-    """מחזיר רגליים מנייתיות במשקל של רבעי אחוז (סכום 400) והערות."""
-    notes = []
+def _slot_leg(portfolios: dict, slot_id: str, w: int, notes: list) -> dict:
+    slot = portfolios["slots"][slot_id]
+    notes.append(slot["note"])
+    return {"slot": slot_id, "label": slot["label"], "fund": None, "w": w}
+
+
+def _equity_legs(template: dict, portfolios: dict, options: dict) -> tuple[list, list]:
+    """מחזיר את הרגליים המנייתיות (סכום המשקלים UNIT) והערות."""
+    notes: list = []
     tid = template["id"]
-    if tid == "olami-ehad":
+    if tid in ("olami-ehad", "olami-ve-agach"):
         fund = _option(template, options, "global_fund")
-        return [{"slot": "global", "label": "עולמי", "fund": fund, "w4": 400}], notes
+        return [{"slot": "global", "label": "מניות עולם", "fund": fund, "w": UNIT}], notes
 
     if tid == "triathlon":
-        if tech_pct % 5 != 0 or not 0 <= tech_pct <= 50:
-            raise ValueError("משקל הטכנולוגיה חייב להיות כפולה של 5 בין 0 ל-50")
         f = template["funds"]
-        rest = 100 - tech_pct
-        legs = [{"slot": "tech", "label": "טכנולוגיה, נאסדק 100", "fund": f["tech"], "w4": 4 * tech_pct}]
+        third = UNIT // 3
+        tech = _option(template, options, "tech_variant")
+        legs = [{"slot": "tech", "label": "טכנולוגיה", "fund": f[tech], "w": third}]
 
         sp = _option(template, options, "sp_variant")
-        if sp == "regular":
-            legs.append({"slot": "sp", "label": "S&P 500 רגיל", "fund": f["sp_regular"], "w4": 2 * rest})
+        if sp in ("regular_ishares", "regular_invesco"):
+            legs.append({"slot": "sp", "label": "S&P 500 רגיל", "fund": f[sp], "w": third})
         elif sp == "equal":
-            legs.append({"slot": "sp", "label": "S&P 500 משקל שווה", "fund": f["sp_equal"], "w4": 2 * rest})
-        elif sp == "hedged":
-            h = template["hedged_slot"]
-            legs.append({"slot": h["id"], "label": h["label"], "fund": None, "w4": 2 * rest})
-            notes.append(h["note"])
-        else:  # combined
-            legs.append({"slot": "sp", "label": "S&P 500 רגיל", "fund": f["sp_regular"], "w4": rest})
-            legs.append({"slot": "sp_equal", "label": "S&P 500 משקל שווה", "fund": f["sp_equal"], "w4": rest})
+            legs.append({"slot": "sp", "label": "S&P 500 משקל שווה", "fund": f["equal"], "w": third})
+        elif sp == "combined":
+            legs.append({"slot": "sp", "label": "S&P 500 רגיל", "fund": f["regular_ishares"], "w": third // 2})
+            legs.append({"slot": "sp_equal", "label": "S&P 500 משקל שווה", "fund": f["equal"], "w": third // 2})
+        elif sp == "value":
+            legs.append(_slot_leg(portfolios, "value", third, notes))
+        else:  # hedged
+            legs.append(_slot_leg(portfolios, "sp_hedged", third, notes))
 
         gl = _option(template, options, "global_variant")
-        if gl == "all":
-            legs.append({"slot": "global", "label": "כל העולם", "fund": f["global_all"], "w4": 2 * rest})
+        if gl in ("all_invesco", "all_ishares"):
+            legs.append({"slot": "global", "label": "כל העולם", "fund": f[gl], "w": third})
         else:
             split = template["ex_us_split"]
             legs.append({"slot": "europe", "label": "אירופה", "fund": f["ex_us_europe"],
-                         "w4": 2 * rest * split["europe"] // 100})
+                         "w": third * split["europe"] // 100})
             legs.append({"slot": "emerging", "label": "שווקים מתפתחים", "fund": f["ex_us_emerging"],
-                         "w4": 2 * rest * split["emerging"] // 100})
+                         "w": third * split["emerging"] // 100})
             notes.append(template["ex_us_note"])
+        notes.append(template["overlap_note"])
         return legs, notes
 
-    legs = [{"slot": l["slot"], "label": l["label"], "fund": l["fund"], "w4": 4 * l["weight"]}
-            for l in template["legs"]]
-    return legs, notes
+    raise ValueError(f"תבנית לא מוכרת: {tid}")
 
 
-def build_portfolio(template_id: str, equity_pct: int, tech_pct: int, portfolios: dict,
-                    options: dict | None = None) -> dict:
+def build_portfolio(template_id: str, equity_pct: int, portfolios: dict, options: dict | None = None) -> dict:
     """בונה תיק לדוגמה. המשקלים הם אחוזים שלמים שסכומם תמיד 100."""
-    if not isinstance(equity_pct, int) or not 0 <= equity_pct <= 100:
+    if not isinstance(equity_pct, int) or isinstance(equity_pct, bool) or not 0 <= equity_pct <= 100:
         raise ValueError("החלק המנייתי חייב להיות מספר שלם בין 0 ל-100")
     template = _template(portfolios, template_id)
-    legs, notes = _equity_legs(template, tech_pct, options or {})
-    assert sum(l["w4"] for l in legs) == 400, "משקלי הרגליים חייבים להסתכם ל-100 אחוז"
+    options = options or {}
+    for key in options:
+        if key not in template.get("options", {}):
+            raise ValueError(f"אפשרות לא מוכרת לתבנית הזו: {key}")
+    legs, notes = _equity_legs(template, portfolios, options)
+    assert sum(l["w"] for l in legs) == UNIT, "משקלי הרגליים חייבים להסתכם ל-100 אחוז"
 
     # עיגול בשיטת השארית הגדולה, בחשבון שלמים בלבד
-    raw = [l["w4"] * equity_pct for l in legs]
-    weights = [r // 400 for r in raw]
+    raw = [l["w"] * equity_pct for l in legs]
+    weights = [r // UNIT for r in raw]
     leftover = equity_pct - sum(weights)
-    order = sorted(range(len(legs)), key=lambda i: (-(raw[i] % 400), i))
+    order = sorted(range(len(legs)), key=lambda i: (-(raw[i] % UNIT), i))
     for i in order[:leftover]:
         weights[i] += 1
 
     lines = [{"slot": l["slot"], "label": l["label"], "fund": l["fund"], "weight": w}
              for l, w in zip(legs, weights) if w > 0]
-    solid = 100 - equity_pct
-    if solid > 0:
-        s = portfolios["solid_slot"]
-        lines.append({"slot": s["id"], "label": s["label"], "fund": None, "weight": solid})
-        notes.append(s["note"])
+    rest = 100 - equity_pct
+    if template_id == "olami-ve-agach":
+        bond = _option(template, options, "bond_variant")
+        if rest == 0:
+            notes.append(template["no_bond_note"])
+        elif bond == "global_agg":
+            lines.append({"slot": "bond", "label": "אגח עולמי כללי", "fund": template["bond_fund"], "weight": rest})
+            notes.append(template["bond_note"])
+        else:
+            leg = _slot_leg(portfolios, "il_general_bond", 0, notes)
+            lines.append({"slot": leg["slot"], "label": leg["label"], "fund": None, "weight": rest})
+    elif rest > 0:
+        leg = _slot_leg(portfolios, "solid", 0, notes)
+        lines.append({"slot": leg["slot"], "label": leg["label"], "fund": None, "weight": rest})
     return {"template_id": template_id, "template_name": template["name"],
             "equity_pct": equity_pct, "lines": lines, "notes": notes}
 
 
+def alternatives(fund_number: str, funds_data: dict) -> list:
+    """קרנות אחרות על אותו סוג מדד, עם ההפרש בעלות השנתית מול הקרן שנבחרה.
+
+    תמיד מציגים את זה למשתמש, כדי שיראה את הפער בין iShares ל-Invesco.
+    """
+    by_num = funds_by_number(funds_data)
+    if fund_number not in by_num:
+        raise ValueError(f"קרן לא בדאטה: {fund_number}")
+    chosen = by_num[fund_number]
+    base = total_cost_pct(chosen)
+    out = []
+    for f in funds_data["funds"]:
+        if f["peer_group"] == chosen["peer_group"] and f["tase_number"] != fund_number:
+            cost = total_cost_pct(f)
+            out.append({"tase_number": f["tase_number"], "name": f["name"], "issuer": f["issuer"],
+                        "index": f["index"], "replication": f["replication"], "cost_pct": cost,
+                        "diff_pct": round(cost - base, 4)})
+    return sorted(out, key=lambda r: (r["cost_pct"], r["tase_number"]))
+
+
 def portfolio_stats(lines: list, funds_data: dict) -> dict:
-    """עלות משוקללת וחשיפה לארה"ב, רק על השורות שיש להן קרן מהדאטה."""
+    """עלות משוקללת על השורות שיש להן קרן, וחשיפה לארה"ב בתוך החלק המנייתי."""
     by_num = funds_by_number(funds_data)
     covered = 0
     cost = 0.0
     us = 0.0
+    us_base = 0
     for line in lines:
         fund = by_num.get(line["fund"]) if line["fund"] else None
         if not fund:
             continue
         covered += line["weight"]
         cost += line["weight"] * total_cost_pct(fund)
-        us += line["weight"] * fund["us_share"]
-    if covered == 0:
-        return {"covered_weight": 0, "weighted_cost_pct": 0.0, "us_share_pct": 0.0}
+        if fund["asset_class"] == "equity" and fund["us_share"] is not None:
+            us_base += line["weight"]
+            us += line["weight"] * fund["us_share"]
     return {
         "covered_weight": covered,
-        "weighted_cost_pct": round(cost / covered, 4),
-        "us_share_pct": round(us / covered * 100, 1),
+        "weighted_cost_pct": round(cost / covered, 4) if covered else 0.0,
+        "us_share_pct": round(us / us_base * 100, 1) if us_base else 0.0,
     }
 
 
@@ -232,7 +271,7 @@ def checkup(holdings: dict, funds_data: dict) -> dict:
         raise ValueError("התיק ריק")
 
     rows, warnings, unknown = [], [], []
-    cost = us = known = tech = satellite = synthetic = 0.0
+    cost = us = us_base = known = tech = satellite = synthetic = bonds = 0.0
     seen_index: dict = {}
     for key, amount in holdings.items():
         if amount == 0:
@@ -245,34 +284,39 @@ def checkup(holdings: dict, funds_data: dict) -> dict:
             continue
         known += weight
         cost += weight * total_cost_pct(fund)
-        us += weight * fund["us_share"]
-        if fund["category"] == "us_tech":
+        if fund["asset_class"] == "bond":
+            bonds += weight
+        elif fund["us_share"] is not None:
+            us_base += weight
+            us += weight * fund["us_share"]
+        if fund["peer_group"] in ("nasdaq100", "us_tech_sector", "semis"):
             tech += weight
-        if fund["category"] in ("sector", "country"):
+        if fund["category"] in ("sector", "country", "thematic", "us_sector"):
             satellite += weight
         if fund["replication"] == "synthetic":
             synthetic += weight
-        seen_index.setdefault(fund["index"], []).append(fund["tase_number"])
+        seen_index.setdefault(fund["peer_group"], []).append(fund["tase_number"])
         rows.append({"key": fund["tase_number"], "name": fund["name"], "weight_pct": round(weight, 1)})
 
     if unknown:
         warnings.append("ניירות שלא נמצאים בדאטה ולא נכללו בחישובים: " + ", ".join(unknown))
-    if known and us / known > 0.8:
-        warnings.append("יותר מ-80 אחוז מהחלק המוכר חשוף לארה\"ב. זו ריכוזיות במדינה אחת.")
-    if tech > 30:
-        warnings.append("יותר מ-30 אחוז בנאסדק 100. המדד חופף מאוד ל-S&P 500 ומגדיל תנודתיות.")
-    if satellite > 10:
-        warnings.append("יותר מ-10 אחוז בקרנות ענף או מדינה. אלה תוספות לתיק ולא בסיס.")
-    for index, numbers in seen_index.items():
+    if us_base and us / us_base > 0.8:
+        warnings.append("יותר מ-80 אחוז מהחלק המנייתי המוכר חשוף לארה\"ב. זו ריכוזיות במדינה אחת.")
+    if tech > 35:
+        warnings.append("יותר מ-35 אחוז בקרנות טכנולוגיה. הן חופפות מאוד ל-S&P 500 ומגדילות תנודתיות.")
+    if satellite - tech > 10:
+        warnings.append("יותר מ-10 אחוז בקרנות ענף, מדינה או נושא שאינן טכנולוגיה. אלה תוספות לתיק ולא בסיס.")
+    for group, numbers in seen_index.items():
         if len(numbers) > 1:
-            warnings.append(f"שתי קרנות על אותו מדד ({index}): {', '.join(numbers)}. אין בזה פיזור נוסף.")
+            warnings.append(f"שתי קרנות על אותו סוג מדד: {', '.join(numbers)}. אין בזה פיזור נוסף.")
 
     return {
         "total": round(total, 2),
         "rows": rows,
         "known_weight_pct": round(known, 1),
+        "bond_weight_pct": round(bonds, 1),
         "weighted_cost_pct": round(cost / known, 4) if known else 0.0,
-        "us_share_pct": round(us / known * 100, 1) if known else 0.0,
+        "us_share_pct": round(us / us_base * 100, 1) if us_base else 0.0,
         "synthetic_weight_pct": round(synthetic, 1),
         "warnings": warnings,
     }

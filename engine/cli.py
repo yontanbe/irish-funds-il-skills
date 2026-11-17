@@ -3,7 +3,7 @@
 דוגמאות:
   python3 -m engine.cli funds
   python3 -m engine.cli quiz
-  python3 -m engine.cli build --template triathlon --answers answers.json --sp equal --global ex_us
+  python3 -m engine.cli build --template triathlon --answers answers.json --tech sp_tech_ishares --sp equal --global ex_us
   python3 -m engine.cli checkup --holdings '{"1159250": 60000, "1159243": 40000}'
   python3 -m engine.cli fees --initial 0 --monthly 2000 --years 20 --return 7 --fee 0.8
 """
@@ -15,17 +15,25 @@ import sys
 
 from . import core
 
+REP = {"physical": "פיזית", "synthetic": "סינתטית", "unknown": "עקיבה לא אומתה"}
+
 
 def _print_portfolio(result: dict, data: dict) -> None:
     by_num = core.funds_by_number(data["funds"])
     print(f"\nתיק לדוגמה: {result['template_name']}")
     for line in result["lines"]:
         fund = by_num.get(line["fund"]) if line["fund"] else None
-        tail = f"{fund['name']} | מספר נייר {fund['tase_number']}" if fund else "בוחרים לבד"
+        tail = (f"{fund['name']} | מספר נייר {fund['tase_number']} | עלות {core.total_cost_pct(fund)}%"
+                if fund else "בוחרים לבד")
         print(f"  {line['weight']:>3}%  {line['label']}  |  {tail}")
+        if fund:
+            for alt in core.alternatives(fund["tase_number"], data["funds"]):
+                word = "יקרה" if alt["diff_pct"] > 0 else "זולה" if alt["diff_pct"] < 0 else "זהה"
+                print(f"        חלופה: {alt['name']} | {alt['tase_number']} | עלות {alt['cost_pct']}% | "
+                      f"{word} ב-{abs(alt['diff_pct'])}%")
     stats = core.portfolio_stats(result["lines"], data["funds"])
     if stats["covered_weight"]:
-        print(f"\nעלות שנתית משוקללת על החלק המנייתי: {stats['weighted_cost_pct']}%")
+        print(f"\nעלות שנתית משוקללת על הקרנות שבתיק: {stats['weighted_cost_pct']}%")
         print(f"חשיפה משוערת לארה\"ב בחלק המנייתי: {stats['us_share_pct']}%")
     for note in result["notes"]:
         print(f"הערה: {note}")
@@ -34,7 +42,7 @@ def _print_portfolio(result: dict, data: dict) -> None:
 def cmd_funds(args, data):
     for f in data["funds"]["funds"]:
         print(f"{f['tase_number']}  {f['name']}  |  {f['index']}  |  "
-              f"עלות {core.total_cost_pct(f)}%  |  {'פיזית' if f['replication'] == 'physical' else 'סינתטית'}")
+              f"עלות {core.total_cost_pct(f)}%  |  {REP[f['replication']]}")
     print("\n" + data["funds"]["meta"]["note"])
 
 
@@ -64,7 +72,7 @@ def cmd_quiz(args, data):
     risk = core.score_risk(answers, data["questionnaire"])
     _show_risk(risk)
     for t in data["portfolios"]["templates"]:
-        result = core.build_portfolio(t["id"], risk["equity_pct"], risk["tech_pct_of_equity"], data["portfolios"])
+        result = core.build_portfolio(t["id"], risk["equity_pct"], data["portfolios"])
         _print_portfolio(result, data)
 
 
@@ -74,14 +82,10 @@ def cmd_build(args, data):
     risk = core.score_risk(answers, data["questionnaire"])
     _show_risk(risk)
     options = {}
-    if args.sp:
-        options["sp_variant"] = args.sp
-    if args.global_variant:
-        options["global_variant"] = args.global_variant
-    if args.global_fund:
-        options["global_fund"] = args.global_fund
-    result = core.build_portfolio(args.template, risk["equity_pct"], risk["tech_pct_of_equity"],
-                                  data["portfolios"], options)
+    for key in ("tech_variant", "sp_variant", "global_variant", "global_fund", "bond_variant"):
+        if getattr(args, key):
+            options[key] = getattr(args, key)
+    result = core.build_portfolio(args.template, risk["equity_pct"], data["portfolios"], options)
     _print_portfolio(result, data)
 
 
@@ -113,9 +117,11 @@ def main(argv=None) -> int:
     b = sub.add_parser("build", help="בניית תיק מקובץ תשובות")
     b.add_argument("--template", required=True)
     b.add_argument("--answers", required=True)
-    b.add_argument("--sp", choices=["regular", "equal", "hedged", "combined"])
-    b.add_argument("--global", dest="global_variant", choices=["all", "ex_us"])
+    b.add_argument("--tech", dest="tech_variant")
+    b.add_argument("--sp", dest="sp_variant")
+    b.add_argument("--global", dest="global_variant")
     b.add_argument("--global-fund", dest="global_fund")
+    b.add_argument("--bond", dest="bond_variant")
     c = sub.add_parser("checkup", help="בדיקת תיק קיים")
     c.add_argument("--holdings", required=True, help="JSON של מספר נייר לסכום בשקלים")
     f = sub.add_parser("fees", help="מחשבון דמי ניהול")

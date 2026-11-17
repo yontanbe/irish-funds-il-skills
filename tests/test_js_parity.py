@@ -6,7 +6,7 @@ import subprocess
 
 import pytest
 
-from engine import build_portfolio, fee_drag, portfolio_stats, score_risk
+from engine import alternatives, build_portfolio, fee_drag, portfolio_stats, score_risk
 
 pytestmark = pytest.mark.skipif(shutil.which("node") is None, reason="node לא מותקן")
 
@@ -16,12 +16,14 @@ const input = JSON.parse(require('fs').readFileSync(0, 'utf8'));
 const D = input.data, out = {risk: [], portfolios: [], fees: [], errors: []};
 for (const a of input.answers) out.risk.push(E.scoreRisk(a, D.questionnaire));
 for (const c of input.cases) {
-  const p = E.buildPortfolio(c.template, c.equity, c.tech, D.portfolios, c.options);
+  const p = E.buildPortfolio(c.template, c.equity, D.portfolios, c.options);
   out.portfolios.push({p: p, s: E.portfolioStats(p.lines, D.funds)});
 }
 for (const f of input.fees) out.fees.push(E.feeDrag.apply(null, f));
+out.alts = {};
+for (const f of D.funds.funds) out.alts[f.tase_number] = E.alternatives(f.tase_number, D.funds);
 for (const c of input.bad) {
-  try { E.buildPortfolio(c.template, c.equity, c.tech, D.portfolios, c.options); out.errors.push(false); }
+  try { E.buildPortfolio(c.template, c.equity, D.portfolios, c.options); out.errors.push(false); }
   catch (e) { out.errors.push(true); }
 }
 process.stdout.write(JSON.stringify(out));
@@ -46,15 +48,13 @@ def js(root, data):
         specs = t.get("options", {})
         keys = list(specs)
         for values in itertools.product(*[list(specs[k]["choices"]) for k in keys]):
-            for tech in (10, 15, 20, 25):
-                for equity in range(0, 101, 1):
-                    cases.append({"template": t["id"], "equity": equity, "tech": tech,
-                                  "options": dict(zip(keys, values))})
+            for equity in range(0, 101, 1):
+                cases.append({"template": t["id"], "equity": equity, "options": dict(zip(keys, values))})
     fees = [[0, 2000, 20, 7, 0.07], [0, 2000, 20, 7, 0.8], [100000, 0, 30, 6.5, 0.2], [5000, 500, 1, 4, 0]]
-    bad = [{"template": "nope", "equity": 50, "tech": 10, "options": {}},
-           {"template": "triathlon", "equity": 101, "tech": 10, "options": {}},
-           {"template": "triathlon", "equity": 50, "tech": 12, "options": {}},
-           {"template": "triathlon", "equity": 50, "tech": 10, "options": {"sp_variant": "x"}}]
+    bad = [{"template": "nope", "equity": 50, "options": {}},
+           {"template": "triathlon", "equity": 101, "options": {}},
+           {"template": "triathlon", "equity": 50, "options": {"bond_variant": "global_agg"}},
+           {"template": "triathlon", "equity": 50, "options": {"sp_variant": "x"}}]
     payload = {"data": data, "answers": answers, "cases": cases, "fees": fees, "bad": bad}
     return payload, _run(root, payload)
 
@@ -70,7 +70,7 @@ def test_portfolios_and_stats_are_identical(js, data):
     payload, out = js
     assert len(out["portfolios"]) == len(payload["cases"]) > 5000
     for case, got in zip(payload["cases"], out["portfolios"]):
-        expected = build_portfolio(case["template"], case["equity"], case["tech"], data["portfolios"], case["options"])
+        expected = build_portfolio(case["template"], case["equity"], data["portfolios"], case["options"])
         assert got["p"] == expected, case
         stats = portfolio_stats(expected["lines"], data["funds"])
         assert got["s"]["covered_weight"] == stats["covered_weight"]
@@ -89,3 +89,14 @@ def test_fee_calculator_is_identical(js):
 def test_js_rejects_the_same_bad_input(js):
     _, out = js
     assert out["errors"] == [True, True, True, True]
+
+
+def test_alternatives_are_identical(js, data):
+    _, out = js
+    assert len(out["alts"]) == len(data["funds"]["funds"])
+    for number, got in out["alts"].items():
+        expected = alternatives(number, data["funds"])
+        assert [a["tase_number"] for a in got] == [a["tase_number"] for a in expected]
+        for g, e in zip(got, expected):
+            assert g["cost_pct"] == pytest.approx(e["cost_pct"], abs=1e-9)
+            assert g["diff_pct"] == pytest.approx(e["diff_pct"], abs=1.01e-4)

@@ -54,6 +54,7 @@ td.num,th.num{font-variant-numeric:tabular-nums;white-space:nowrap}
 .row{display:grid;grid-template-columns:3.2rem 1fr;gap:.7rem;align-items:center;margin:.55rem 0}
 .row .w{font-weight:800;font-variant-numeric:tabular-nums}
 .small{font-size:.88rem;color:var(--muted)}
+.alt{font-size:.85rem;color:var(--muted);border-inline-start:3px solid var(--line);padding-inline-start:.5rem;margin-top:.35rem}
 .progress{font-size:.9rem;color:var(--muted)}
 .btns{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
 [hidden]{display:none!important}
@@ -100,8 +101,8 @@ def page(filename: str, title: str, body: str, script: str, data: dict | None) -
 INDEX_BODY = """
 <h1>קרנות איריות בתל אביב, בפשטות</h1>
 <p class="lead">כלי מחקר חינמי בקוד פתוח למשקיע לטווח ארוך. בלי הרשמה, בלי מעקב, הכל רץ אצלכם בדפדפן.</p>
-<div class="card"><h2 style="margin-top:0">בונה התיק</h2><p>שבע שאלות קצרות, ותקבלו תיק לדוגמה לפי רמת הסיכון שלכם.</p><p><a href="tik.html">להתחיל בשאלון</a></p></div>
-<div class="card"><h2 style="margin-top:0">טבלת הקרנות</h2><p>כל הקרנות האיריות שבדאטה, עם מספר נייר, דמי ניהול וסוג עקיבה.</p><p><a href="kranot.html">לטבלה</a></p></div>
+<div class="card"><h2 style="margin-top:0">בונה התיק</h2><p>שבע שאלות קצרות, ותקבלו תיק לדוגמה לפי רמת הסיכון שלכם: עולמי אחד, מניות ואג"ח, או טריאתלון. ליד כל קרן מוצגת החלופה והפרש העלות.</p><p><a href="tik.html">להתחיל בשאלון</a></p></div>
+<div class="card"><h2 style="margin-top:0">טבלת הקרנות</h2><p>כל קרנות iShares ו-Invesco האיריות שבדאטה, מניות ואג"ח, עם מספר נייר, דמי ניהול וסוג עקיבה.</p><p><a href="kranot.html">לטבלה</a></p></div>
 <div class="card"><h2 style="margin-top:0">מחשבון דמי ניהול</h2><p>כמה כסף דמי הניהול אוכלים לכם לאורך 20 או 30 שנה.</p><p><a href="dmei-nihul.html">למחשבון</a></p></div>
 <h2>מה זה קרן אירית, בשני משפטים</h2>
 <p>קרן סל שמאוגדת באירלנד, עוקבת אחרי מדד כמו S&amp;P 500, ונסחרת בשקלים בבורסה בתל אביב. רובן צוברות: הדיבידנד מושקע חזרה בתוך הקרן, ומס רווחי הון משלמים רק במכירה.</p>
@@ -173,10 +174,10 @@ function showResult(){
   risk=E.scoreRisk(answers,D.questionnaire);
   $('quiz').hidden=true;$('result').hidden=false;
   $('profile').textContent=risk.profile_name;
-  $('equity').textContent='חלק מנייתי לדוגמה: '+risk.equity_pct+' אחוז. השאר ברכיב סולידי.';
+  $('equity').textContent='חלק מנייתי לדוגמה: '+risk.equity_pct+' אחוז. השאר ברכיב סולידי או באג"ח.';
   var w=$('warnings');w.textContent='';risk.warnings.forEach(function(t){w.appendChild(el('p',{'class':'warn'},t));});
   var sel=$('template');sel.textContent='';
-  D.portfolios.templates.forEach(function(t){sel.appendChild(el('option',{value:t.id},t.name+' ('+t.level+')'));});
+  D.portfolios.templates.forEach(function(t){sel.appendChild(el('option',{value:t.id},'תיק '+t.number+': '+t.name));});
   renderTemplate();$('profile').setAttribute('tabindex','-1');$('profile').focus();
 }
 $('template').addEventListener('change',function(){opts={};renderTemplate();});
@@ -195,7 +196,7 @@ function renderTemplate(){
   renderPortfolio(t);
 }
 function renderPortfolio(t){
-  var p=E.buildPortfolio(t.id,risk.equity_pct,risk.tech_pct_of_equity,D.portfolios,opts);
+  var p=E.buildPortfolio(t.id,risk.equity_pct,D.portfolios,opts);
   $('ptitle').textContent='תיק לדוגמה: '+p.template_name;
   var L=$('lines');L.textContent='';
   p.lines.forEach(function(line){
@@ -204,6 +205,10 @@ function renderPortfolio(t){
     var d=el('div');d.appendChild(el('div',{},line.label));
     d.appendChild(el('div',{'class':'small'},f?f.name+' | מספר נייר '+f.tase_number+' | עלות '+E.totalCostPct(f)+'%':'בוחרים לבד'));
     var bar=el('div',{'class':'bar','aria-hidden':'true'});bar.style.width=line.weight+'%';d.appendChild(bar);
+    if(f){E.alternatives(f.tase_number,D.funds).forEach(function(a){
+      var sign=a.diff_pct>0?'יקרה ב-'+a.diff_pct+'%':(a.diff_pct<0?'זולה ב-'+Math.abs(a.diff_pct)+'%':'אותה עלות');
+      d.appendChild(el('div',{'class':'alt'},'חלופה: '+a.name+' | מספר נייר '+a.tase_number+' | עלות '+a.cost_pct+'% | '+sign));
+    });}
     row.appendChild(d);L.appendChild(row);
   });
   var s=E.portfolioStats(p.lines,D.funds);
@@ -216,7 +221,7 @@ renderQ();
 
 KRANOT_BODY = """
 <h1>טבלת הקרנות</h1>
-<p class="lead">קרנות איריות צוברות שנסחרות בשקלים בבורסה בתל אביב. אפשר לסנן לפי סוג.</p>
+<p class="lead">כל קרנות iShares ו-Invesco האיריות שנמצאו כנסחרות בשקלים בבורסה בתל אביב, מניות ואג"ח. אפשר לסנן לפי סוג.</p>
 <label class="fld" for="cat">סינון לפי סוג</label>
 <select id="cat"></select>
 <div class="card tablewrap">
@@ -232,7 +237,8 @@ KRANOT_BODY = """
 KRANOT_JS = r"""
 (function(){
 var D=window.IF_DATA,E=window.IrishFunds;
-var CAT={us_large:'ארה"ב, S&P 500',us_equal_weight:'ארה"ב, משקל שווה',us_tech:'ארה"ב, נאסדק 100',us_small:'ארה"ב, חברות קטנות',global_all:'עולמי, מפותחים ומתפתחים',global_developed:'עולמי, מפותחים בלבד',emerging:'שווקים מתפתחים',europe:'אירופה',sector:'ענף',country:'מדינה'};
+var CAT={us_large:'ארה"ב, S&P 500',us_equal_weight:'ארה"ב, משקל שווה',us_tech:'ארה"ב, נאסדק 100',us_small:'ארה"ב, חברות קטנות',us_sector:'ארה"ב, לפי ענף',global_all:'עולמי, מפותחים ומתפתחים',global_developed:'עולמי, מפותחים בלבד',europe:'אירופה',emerging:'שווקים מתפתחים',country:'מדינה',sector:'ענף עולמי',thematic:'נושא',bond_global:'אג"ח עולמי',bond_us_gov:'אג"ח ממשלת ארה"ב',bond_corp:'אג"ח קונצרני',bond_em:'אג"ח שווקים מתפתחים'};
+var REP={physical:'פיזית',synthetic:'סינתטית',unknown:'לא אומת'};
 var TAX={cpi:'מדד המחירים לצרכן',usd:'שער הדולר',unknown:'לא אומת'};
 var sel=document.getElementById('cat');
 function opt(v,t){var o=document.createElement('option');o.value=v;o.textContent=t;sel.appendChild(o);}
@@ -246,7 +252,7 @@ function render(){
     var th=document.createElement('th');th.scope='row';th.textContent=f.name;th.style.whiteSpace='normal';tr.appendChild(th);
     tr.appendChild(td(f.tase_number,'num'));tr.appendChild(td(f.index));
     var cost=E.totalCostPct(f)+'%';if(f.fee_range[0]!==f.fee_range[1])cost+=' (דווח '+f.fee_range[0]+' עד '+f.fee_range[1]+')';
-    tr.appendChild(td(cost,'num'));tr.appendChild(td(f.replication==='physical'?'פיזית':'סינתטית'));tr.appendChild(td(TAX[f.tax_link]));
+    tr.appendChild(td(cost,'num'));tr.appendChild(td(REP[f.replication]));tr.appendChild(td(TAX[f.tax_link]));
     rows.appendChild(tr);
   });
   document.getElementById('cap').textContent='מוצגות '+list.length+' קרנות. נבדק בתאריך '+D.funds.meta.checked_at+'.';

@@ -2,7 +2,8 @@
   "meta": {
     "checked_at": "2026-11-17",
     "note": "הנתונים נאספו ממקורות משניים ברשת ולא מאתר הבורסה עצמו. דמי ניהול ועמלות משתנים. לפני כל פעולה יש לאמת כל קרן בעמוד שלה במאיה או באתר הבורסה.",
-    "verify_url_template": "https://maya.tase.co.il/he/funds/etf/{tase_number}"
+    "verify_url_template": "https://maya.tase.co.il/he/funds/etf/{tase_number}",
+    "coverage": "כל קרנות iShares ו-Invesco האיריות שנמצאו במחקר כנסחרות בתל אביב. אם חסרה קרן, פותחים Issue."
   },
   "funds": [
     {
@@ -16,12 +17,25 @@
       "accumulating": true,
       "fee_pct": 0.07,
       "extra_fee_pct": 0.0,
-      "fee_range": [0.07, 0.07],
+      "fee_range": [
+        0.07,
+        0.07
+      ],
       "tax_link": "usd",
       "us_share": 1.0,
       "confidence": "high",
       "notes": "ISIN IE00B5BMR087. נסחרת באירופה בסימול CSPX.",
-      "sources": ["https://tradingil.co.il/קרן-אירית/", "https://moneyplan.co.il/irish-etf-exchange-traded-fund/", "https://www.funder.co.il/etf/1159250"]
+      "sources": [
+        "https://tradingil.co.il/קרן-אירית/",
+        "https://moneyplan.co.il/irish-etf-exchange-traded-fund/",
+        "https://www.funder.co.il/etf/1159250",
+        "https://www.superfunds.ai/funds/irish"
+      ],
+      "asset_class": "equity",
+      "peer_group": "sp500",
+      "isin": "IE00B5BMR087",
+      "yahoo_ticker": "CSPX.L",
+      "ticker_confidence": "verified"
     },
     {
       "tase_number": "1183441",
@@ -34,12 +48,53 @@
       "accumulating": true,
       "fee_pct": 0.05,
       "extra_fee_pct": 0.07,
-      "fee_range": [0.05, 0.05],
+      "fee_range": [
+        0.05,
+        0.05
+      ],
       "tax_link": "cpi",
       "us_share": 1.0,
       "confidence": "high",
       "notes": "עמלת ה-SWAP משתנה ואינה בשליטת הקרן. דווח שעלתה מ-0.04 ל-0.07.",
-      "sources": ["https://tradingil.co.il/קרן-אירית/", "https://moneyplan.co.il/irish-etf-exchange-traded-fund/", "https://www.funder.co.il/etf/1183441"]
+      "sources": [
+        "https://tradingil.co.il/קרן-אירית/",
+        "https://moneyplan.co.il/irish-etf-exchange-traded-fund/",
+        "https://www.funder.co.il/etf/1183441",
+        "https://www.superfunds.ai/funds/irish"
+      ],
+      "asset_class": "equity",
+      "peer_group": "sp500",
+      "isin": null,
+      "yahoo_ticker": "SPXS.L",
+      "ticker_confidence": "likely"
+    },
+    {
+      "tase_number": "1183458",
+      "name": "Invesco S&P 500 ESG UCITS ETF",
+      "tase_short_name": "",
+      "issuer": "Invesco",
+      "index": "S&P 500 ESG",
+      "category": "us_large",
+      "replication": "unknown",
+      "accumulating": true,
+      "fee_pct": 0.09,
+      "extra_fee_pct": 0.0,
+      "fee_range": [
+        0.09,
+        0.09
+      ],
+      "tax_link": "unknown",
+      "us_share": 1.0,
+      "confidence": "medium",
+      "notes": "שיטת העקיבה לא אומתה.",
+      "sources": [
+        "https://www.superfunds.ai/funds/irish"
+      ],
+      "asset_class": "equity",
+      "peer_group": "sp500_esg",
+      "isin": null,
+      "yahoo_ticker": null,
+      "ticker_confidence": null
     },
     {
       "tase_number": "1207208",
@@ -50,32 +105,26 @@
       "category": "us_equal_weight",
       "replication": "physical",
       "accumulating": true,
-      "fee_pct": 0.20,
+      "fee_pct": 0.2,
       "extra_fee_pct": 0.0,
-      "fee_range": [0.20, 0.20],
+      "fee_range": [
+        0.2,
+        0.2
+      ],
       "tax_link": "cpi",
       "us_share": 1.0,
       "confidence": "medium",
       "notes": "ISIN IE00BNGJJT35. כל מניה במדד מקבלת משקל דומה, בערך 0.2 אחוז.",
-      "sources": ["https://lazyinvestor.co.il/equal-weight/", "https://il.investing.com/etfs/speq?cid=1220156"]
-    },
-    {
-      "tase_number": "1159243",
-      "name": "iShares NASDAQ 100 UCITS ETF",
-      "tase_short_name": "",
-      "issuer": "iShares",
-      "index": "NASDAQ 100",
-      "category": "us_tech",
-      "replication": "physical",
-      "accumulating": true,
-      "fee_pct": 0.30,
-      "extra_fee_pct": 0.0,
-      "fee_range": [0.30, 0.33],
-      "tax_link": "usd",
-      "us_share": 1.0,
-      "confidence": "medium",
-      "notes": "המקורות חלוקים על דמי הניהול: 0.30 או 0.33.",
-      "sources": ["https://tradingil.co.il/קרן-אירית/", "https://moneyplan.co.il/irish-etf-exchange-traded-fund/"]
+      "sources": [
+        "https://lazyinvestor.co.il/equal-weight/",
+        "https://il.investing.com/etfs/speq?cid=1220156",
+        "https://www.superfunds.ai/funds/irish"
+      ],
+      "asset_class": "equity",
+      "peer_group": "sp500_equal",
+      "isin": "IE00BNGJJT35",
+      "yahoo_ticker": null,
+      "ticker_confidence": null
     },
     {
       "tase_number": "1186063",
@@ -86,140 +135,56 @@
       "category": "us_tech",
       "replication": "synthetic",
       "accumulating": true,
-      "fee_pct": 0.20,
+      "fee_pct": 0.2,
       "extra_fee_pct": 0.05,
-      "fee_range": [0.20, 0.25],
+      "fee_range": [
+        0.2,
+        0.25
+      ],
       "tax_link": "unknown",
       "us_share": 1.0,
       "confidence": "medium",
       "notes": "המקורות חלוקים על העלות הכוללת. בסיס המס לא אומת.",
-      "sources": ["https://tradingil.co.il/קרן-אירית/", "https://moneyplan.co.il/irish-etf-exchange-traded-fund/"]
+      "sources": [
+        "https://tradingil.co.il/קרן-אירית/",
+        "https://moneyplan.co.il/irish-etf-exchange-traded-fund/",
+        "https://www.superfunds.ai/funds/irish"
+      ],
+      "asset_class": "equity",
+      "peer_group": "nasdaq100",
+      "isin": null,
+      "yahoo_ticker": null,
+      "ticker_confidence": null
     },
     {
-      "tase_number": "1159235",
-      "name": "iShares MSCI ACWI UCITS ETF",
-      "tase_short_name": "אשס.חוץ MS ACWI",
-      "issuer": "iShares",
-      "index": "MSCI ACWI",
-      "category": "global_all",
-      "replication": "physical",
-      "accumulating": true,
-      "fee_pct": 0.20,
-      "extra_fee_pct": 0.0,
-      "fee_range": [0.20, 0.20],
-      "tax_link": "unknown",
-      "us_share": 0.63,
-      "confidence": "high",
-      "notes": "מדינות מפותחות ומתפתחות. המקורות חלוקים על בסיס המס.",
-      "sources": ["https://tradingil.co.il/קרן-אירית/", "https://moneyplan.co.il/irish-etf-exchange-traded-fund/"]
-    },
-    {
-      "tase_number": "1209220",
-      "name": "Invesco FTSE All-World UCITS ETF",
-      "tase_short_name": "אינ.חוץFTSEAW",
-      "issuer": "Invesco",
-      "index": "FTSE All-World",
-      "category": "global_all",
-      "replication": "physical",
-      "accumulating": true,
-      "fee_pct": 0.15,
-      "extra_fee_pct": 0.0,
-      "fee_range": [0.15, 0.15],
-      "tax_link": "cpi",
-      "us_share": 0.62,
-      "confidence": "high",
-      "notes": "מדינות מפותחות ומתפתחות.",
-      "sources": ["https://tradingil.co.il/קרן-אירית/", "https://lazyinvestor.co.il/worldindex/"]
-    },
-    {
-      "tase_number": "1185164",
-      "name": "Invesco MSCI World UCITS ETF Acc",
-      "tase_short_name": "אינ.חוץ.WORLD",
-      "issuer": "Invesco",
-      "index": "MSCI World",
-      "category": "global_developed",
-      "replication": "synthetic",
-      "accumulating": true,
-      "fee_pct": 0.05,
-      "extra_fee_pct": 0.03,
-      "fee_range": [0.05, 0.19],
-      "tax_link": "cpi",
-      "us_share": 0.70,
-      "confidence": "medium",
-      "notes": "מדינות מפותחות בלבד, בלי שווקים מתפתחים. המקורות חלוקים על דמי הניהול: 0.05 ועוד SWAP, 0.08 או 0.19.",
-      "sources": ["https://tradingil.co.il/קרן-אירית/", "https://lazyinvestor.co.il/worldindex/", "https://moneyplan.co.il/irish-etf-exchange-traded-fund/"]
-    },
-    {
-      "tase_number": "1159169",
-      "name": "iShares Core MSCI EM IMI UCITS ETF",
-      "tase_short_name": "אשס.חוץ MSCI EM",
-      "issuer": "iShares",
-      "index": "MSCI Emerging Markets IMI",
-      "category": "emerging",
-      "replication": "physical",
-      "accumulating": true,
-      "fee_pct": 0.18,
-      "extra_fee_pct": 0.0,
-      "fee_range": [0.18, 0.18],
-      "tax_link": "unknown",
-      "us_share": 0.0,
-      "confidence": "high",
-      "notes": "שווקים מתפתחים כולל חברות קטנות.",
-      "sources": ["https://tradingil.co.il/קרן-אירית/", "https://moneyplan.co.il/irish-etf-exchange-traded-fund/"]
-    },
-    {
-      "tase_number": "1183490",
-      "name": "Invesco MSCI Emerging Markets UCITS ETF",
-      "tase_short_name": "",
-      "issuer": "Invesco",
-      "index": "MSCI Emerging Markets",
-      "category": "emerging",
-      "replication": "synthetic",
-      "accumulating": true,
-      "fee_pct": 0.09,
-      "extra_fee_pct": 0.0,
-      "fee_range": [0.09, 0.19],
-      "tax_link": "unknown",
-      "us_share": 0.0,
-      "confidence": "medium",
-      "notes": "המקורות חלוקים על דמי הניהול: 0.09 או 0.19.",
-      "sources": ["https://tradingil.co.il/קרן-אירית/", "https://moneyplan.co.il/irish-etf-exchange-traded-fund/"]
-    },
-    {
-      "tase_number": "1159094",
-      "name": "iShares Core MSCI Europe UCITS ETF EUR (Acc)",
+      "tase_number": "1159243",
+      "name": "iShares NASDAQ 100 UCITS ETF",
       "tase_short_name": "",
       "issuer": "iShares",
-      "index": "MSCI Europe",
-      "category": "europe",
+      "index": "NASDAQ 100",
+      "category": "us_tech",
       "replication": "physical",
       "accumulating": true,
-      "fee_pct": 0.12,
+      "fee_pct": 0.3,
       "extra_fee_pct": 0.0,
-      "fee_range": [0.12, 0.12],
-      "tax_link": "unknown",
-      "us_share": 0.0,
-      "confidence": "high",
-      "notes": "",
-      "sources": ["https://tradingil.co.il/קרן-אירית/", "https://moneyplan.co.il/irish-etf-exchange-traded-fund/"]
-    },
-    {
-      "tase_number": "1185172",
-      "name": "Invesco STOXX Europe 600 UCITS ETF Acc",
-      "tase_short_name": "",
-      "issuer": "Invesco",
-      "index": "STOXX Europe 600",
-      "category": "europe",
-      "replication": "synthetic",
-      "accumulating": true,
-      "fee_pct": 0.19,
-      "extra_fee_pct": 0.0,
-      "fee_range": [0.19, 0.223],
-      "tax_link": "unknown",
-      "us_share": 0.0,
+      "fee_range": [
+        0.3,
+        0.33
+      ],
+      "tax_link": "usd",
+      "us_share": 1.0,
       "confidence": "medium",
-      "notes": "המקורות חלוקים על העלות הכוללת.",
-      "sources": ["https://tradingil.co.il/קרן-אירית/", "https://moneyplan.co.il/irish-etf-exchange-traded-fund/"]
+      "notes": "המקורות חלוקים על דמי הניהול: 0.30 או 0.33.",
+      "sources": [
+        "https://tradingil.co.il/קרן-אירית/",
+        "https://moneyplan.co.il/irish-etf-exchange-traded-fund/",
+        "https://www.superfunds.ai/funds/irish"
+      ],
+      "asset_class": "equity",
+      "peer_group": "nasdaq100",
+      "isin": null,
+      "yahoo_ticker": "CNDX.L",
+      "ticker_confidence": "likely"
     },
     {
       "tase_number": "1206895",
@@ -232,48 +197,516 @@
       "accumulating": true,
       "fee_pct": 0.25,
       "extra_fee_pct": 0.0,
-      "fee_range": [0.25, 0.25],
+      "fee_range": [
+        0.25,
+        0.25
+      ],
       "tax_link": "unknown",
       "us_share": 1.0,
       "confidence": "medium",
       "notes": "חברות קטנות בארה\"ב.",
-      "sources": ["https://tradingil.co.il/קרן-אירית/", "https://moneyplan.co.il/irish-etf-exchange-traded-fund/"]
+      "sources": [
+        "https://tradingil.co.il/קרן-אירית/",
+        "https://moneyplan.co.il/irish-etf-exchange-traded-fund/",
+        "https://www.superfunds.ai/funds/irish"
+      ],
+      "asset_class": "equity",
+      "peer_group": "us_small",
+      "isin": null,
+      "yahoo_ticker": null,
+      "ticker_confidence": null
     },
     {
-      "tase_number": "1248376",
-      "name": "iShares MSCI Global Semiconductors UCITS ETF",
+      "tase_number": "1159227",
+      "name": "iShares S&P 500 Consumer Discretionary Sector UCITS ETF",
       "tase_short_name": "",
       "issuer": "iShares",
-      "index": "MSCI Global Semiconductors",
-      "category": "sector",
-      "replication": "physical",
-      "accumulating": true,
-      "fee_pct": 0.35,
-      "extra_fee_pct": 0.0,
-      "fee_range": [0.35, 0.35],
-      "tax_link": "unknown",
-      "us_share": 0.7,
-      "confidence": "medium",
-      "notes": "נרשמה למסחר ב-5.11.2026. קרן ענפית, תוספת לתיק ולא בסיס. שיעור ארה\"ב הוא הערכה גסה.",
-      "sources": ["https://moneyplan.co.il/קרנות-סל-איריות-חדשות-בלאקרוק/", "https://shukist.co.il/article/1fc80b6d-67b5-41ec-aedf-7d3c0bf13f71"]
-    },
-    {
-      "tase_number": "1248368",
-      "name": "iShares S&P 500 Energy Sector UCITS ETF",
-      "tase_short_name": "",
-      "issuer": "iShares",
-      "index": "S&P 500 Energy",
-      "category": "sector",
+      "index": "S&P 500 Consumer Discretionary",
+      "category": "us_sector",
       "replication": "physical",
       "accumulating": true,
       "fee_pct": 0.15,
       "extra_fee_pct": 0.0,
-      "fee_range": [0.15, 0.15],
+      "fee_range": [
+        0.15,
+        0.15
+      ],
       "tax_link": "unknown",
       "us_share": 1.0,
       "confidence": "medium",
-      "notes": "נרשמה למסחר ב-5.11.2026. קרן ענפית, תוספת לתיק ולא בסיס.",
-      "sources": ["https://moneyplan.co.il/קרנות-סל-איריות-חדשות-בלאקרוק/", "https://shukist.co.il/article/1fc80b6d-67b5-41ec-aedf-7d3c0bf13f71"]
+      "notes": "",
+      "sources": [
+        "https://www.superfunds.ai/funds/irish"
+      ],
+      "asset_class": "equity",
+      "peer_group": "us_consumer_sector",
+      "isin": null,
+      "yahoo_ticker": null,
+      "ticker_confidence": null
+    },
+    {
+      "tase_number": "1183466",
+      "name": "Invesco US Financials Select Sector UCITS ETF",
+      "tase_short_name": "",
+      "issuer": "Invesco",
+      "index": "S&P Select Sector Financials",
+      "category": "us_sector",
+      "replication": "unknown",
+      "accumulating": true,
+      "fee_pct": 0.14,
+      "extra_fee_pct": 0.0,
+      "fee_range": [
+        0.14,
+        0.14
+      ],
+      "tax_link": "unknown",
+      "us_share": 1.0,
+      "confidence": "medium",
+      "notes": "שיטת העקיבה לא אומתה.",
+      "sources": [
+        "https://www.superfunds.ai/funds/irish"
+      ],
+      "asset_class": "equity",
+      "peer_group": "us_financials_sector",
+      "isin": null,
+      "yahoo_ticker": null,
+      "ticker_confidence": null
+    },
+    {
+      "tase_number": "1159219",
+      "name": "iShares S&P 500 Financials Sector UCITS ETF",
+      "tase_short_name": "",
+      "issuer": "iShares",
+      "index": "S&P 500 Financials",
+      "category": "us_sector",
+      "replication": "physical",
+      "accumulating": true,
+      "fee_pct": 0.15,
+      "extra_fee_pct": 0.0,
+      "fee_range": [
+        0.15,
+        0.15
+      ],
+      "tax_link": "unknown",
+      "us_share": 1.0,
+      "confidence": "medium",
+      "notes": "",
+      "sources": [
+        "https://www.superfunds.ai/funds/irish"
+      ],
+      "asset_class": "equity",
+      "peer_group": "us_financials_sector",
+      "isin": null,
+      "yahoo_ticker": null,
+      "ticker_confidence": null
+    },
+    {
+      "tase_number": "1183474",
+      "name": "Invesco US Health Care Select Sector UCITS ETF",
+      "tase_short_name": "",
+      "issuer": "Invesco",
+      "index": "S&P Select Sector Health Care",
+      "category": "us_sector",
+      "replication": "unknown",
+      "accumulating": true,
+      "fee_pct": 0.14,
+      "extra_fee_pct": 0.0,
+      "fee_range": [
+        0.14,
+        0.14
+      ],
+      "tax_link": "unknown",
+      "us_share": 1.0,
+      "confidence": "medium",
+      "notes": "שיטת העקיבה לא אומתה.",
+      "sources": [
+        "https://www.superfunds.ai/funds/irish"
+      ],
+      "asset_class": "equity",
+      "peer_group": "us_health_sector",
+      "isin": null,
+      "yahoo_ticker": null,
+      "ticker_confidence": null
+    },
+    {
+      "tase_number": "1159201",
+      "name": "iShares S&P 500 Health Care Sector UCITS ETF",
+      "tase_short_name": "",
+      "issuer": "iShares",
+      "index": "S&P 500 Health Care",
+      "category": "us_sector",
+      "replication": "physical",
+      "accumulating": true,
+      "fee_pct": 0.15,
+      "extra_fee_pct": 0.0,
+      "fee_range": [
+        0.15,
+        0.15
+      ],
+      "tax_link": "unknown",
+      "us_share": 1.0,
+      "confidence": "medium",
+      "notes": "",
+      "sources": [
+        "https://www.superfunds.ai/funds/irish"
+      ],
+      "asset_class": "equity",
+      "peer_group": "us_health_sector",
+      "isin": null,
+      "yahoo_ticker": null,
+      "ticker_confidence": null
+    },
+    {
+      "tase_number": "1185180",
+      "name": "Invesco US Technology Select Sector UCITS ETF",
+      "tase_short_name": "",
+      "issuer": "Invesco",
+      "index": "S&P Select Sector Capped 20% Technology",
+      "category": "us_sector",
+      "replication": "unknown",
+      "accumulating": true,
+      "fee_pct": 0.14,
+      "extra_fee_pct": 0.0,
+      "fee_range": [
+        0.14,
+        0.14
+      ],
+      "tax_link": "unknown",
+      "us_share": 1.0,
+      "confidence": "medium",
+      "notes": "שיטת העקיבה לא אומתה.",
+      "sources": [
+        "https://www.superfunds.ai/funds/irish"
+      ],
+      "asset_class": "equity",
+      "peer_group": "us_tech_sector",
+      "isin": null,
+      "yahoo_ticker": null,
+      "ticker_confidence": null
+    },
+    {
+      "tase_number": "1159193",
+      "name": "iShares S&P 500 Information Technology Sector UCITS ETF",
+      "tase_short_name": "אשס.חוץ SP TECH",
+      "issuer": "iShares",
+      "index": "S&P 500 Capped 35/20 Information Technology",
+      "category": "us_sector",
+      "replication": "physical",
+      "accumulating": true,
+      "fee_pct": 0.15,
+      "extra_fee_pct": 0.0,
+      "fee_range": [
+        0.15,
+        0.15
+      ],
+      "tax_link": "unknown",
+      "us_share": 1.0,
+      "confidence": "medium",
+      "notes": "מדד עם תקרת משקל: החברה הגדולה עד 35 אחוז והשאר עד 20 אחוז.",
+      "sources": [
+        "https://www.superfunds.ai/funds/irish",
+        "https://www.blackrock.com/il/individual/en/products/280510/ishares-sp-500-information-technology-sector-ucits-etf",
+        "https://www.funder.co.il/etf/1159193"
+      ],
+      "asset_class": "equity",
+      "peer_group": "us_tech_sector",
+      "isin": "IE00B3WJKG14",
+      "yahoo_ticker": "IUIT.L",
+      "ticker_confidence": "verified"
+    },
+    {
+      "tase_number": "1209220",
+      "name": "Invesco FTSE All-World UCITS ETF",
+      "tase_short_name": "אינ.חוץFTSEAW",
+      "issuer": "Invesco",
+      "index": "FTSE All-World",
+      "category": "global_all",
+      "replication": "physical",
+      "accumulating": true,
+      "fee_pct": 0.15,
+      "extra_fee_pct": 0.0,
+      "fee_range": [
+        0.15,
+        0.15
+      ],
+      "tax_link": "cpi",
+      "us_share": 0.62,
+      "confidence": "high",
+      "notes": "מדינות מפותחות ומתפתחות.",
+      "sources": [
+        "https://tradingil.co.il/קרן-אירית/",
+        "https://lazyinvestor.co.il/worldindex/",
+        "https://www.superfunds.ai/funds/irish"
+      ],
+      "asset_class": "equity",
+      "peer_group": "global_all",
+      "isin": null,
+      "yahoo_ticker": "FWRA.L",
+      "ticker_confidence": "likely"
+    },
+    {
+      "tase_number": "1159235",
+      "name": "iShares MSCI ACWI UCITS ETF",
+      "tase_short_name": "אשס.חוץ MS ACWI",
+      "issuer": "iShares",
+      "index": "MSCI ACWI",
+      "category": "global_all",
+      "replication": "physical",
+      "accumulating": true,
+      "fee_pct": 0.2,
+      "extra_fee_pct": 0.0,
+      "fee_range": [
+        0.2,
+        0.2
+      ],
+      "tax_link": "unknown",
+      "us_share": 0.63,
+      "confidence": "high",
+      "notes": "מדינות מפותחות ומתפתחות. המקורות חלוקים על בסיס המס.",
+      "sources": [
+        "https://tradingil.co.il/קרן-אירית/",
+        "https://moneyplan.co.il/irish-etf-exchange-traded-fund/",
+        "https://www.superfunds.ai/funds/irish"
+      ],
+      "asset_class": "equity",
+      "peer_group": "global_all",
+      "isin": null,
+      "yahoo_ticker": "SSAC.L",
+      "ticker_confidence": "likely"
+    },
+    {
+      "tase_number": "1185164",
+      "name": "Invesco MSCI World UCITS ETF Acc",
+      "tase_short_name": "אינ.חוץ.WORLD",
+      "issuer": "Invesco",
+      "index": "MSCI World",
+      "category": "global_developed",
+      "replication": "synthetic",
+      "accumulating": true,
+      "fee_pct": 0.05,
+      "extra_fee_pct": 0.03,
+      "fee_range": [
+        0.05,
+        0.19
+      ],
+      "tax_link": "cpi",
+      "us_share": 0.7,
+      "confidence": "medium",
+      "notes": "מדינות מפותחות בלבד, בלי שווקים מתפתחים. המקורות חלוקים על דמי הניהול: 0.05 ועוד SWAP, 0.08 או 0.19.",
+      "sources": [
+        "https://tradingil.co.il/קרן-אירית/",
+        "https://lazyinvestor.co.il/worldindex/",
+        "https://moneyplan.co.il/irish-etf-exchange-traded-fund/"
+      ],
+      "asset_class": "equity",
+      "peer_group": "global_all",
+      "isin": "IE00B60SX394",
+      "yahoo_ticker": "MXWO.L",
+      "ticker_confidence": "verified"
+    },
+    {
+      "tase_number": "1159094",
+      "name": "iShares Core MSCI Europe UCITS ETF EUR (Acc)",
+      "tase_short_name": "",
+      "issuer": "iShares",
+      "index": "MSCI Europe",
+      "category": "europe",
+      "replication": "physical",
+      "accumulating": true,
+      "fee_pct": 0.12,
+      "extra_fee_pct": 0.0,
+      "fee_range": [
+        0.12,
+        0.12
+      ],
+      "tax_link": "unknown",
+      "us_share": 0.0,
+      "confidence": "high",
+      "notes": "",
+      "sources": [
+        "https://tradingil.co.il/קרן-אירית/",
+        "https://moneyplan.co.il/irish-etf-exchange-traded-fund/",
+        "https://www.superfunds.ai/funds/irish"
+      ],
+      "asset_class": "equity",
+      "peer_group": "europe",
+      "isin": null,
+      "yahoo_ticker": null,
+      "ticker_confidence": null
+    },
+    {
+      "tase_number": "1185172",
+      "name": "Invesco STOXX Europe 600 UCITS ETF Acc",
+      "tase_short_name": "",
+      "issuer": "Invesco",
+      "index": "STOXX Europe 600",
+      "category": "europe",
+      "replication": "synthetic",
+      "accumulating": true,
+      "fee_pct": 0.19,
+      "extra_fee_pct": 0.0,
+      "fee_range": [
+        0.19,
+        0.223
+      ],
+      "tax_link": "unknown",
+      "us_share": 0.0,
+      "confidence": "medium",
+      "notes": "המקורות חלוקים על העלות הכוללת.",
+      "sources": [
+        "https://tradingil.co.il/קרן-אירית/",
+        "https://moneyplan.co.il/irish-etf-exchange-traded-fund/",
+        "https://www.superfunds.ai/funds/irish"
+      ],
+      "asset_class": "equity",
+      "peer_group": "europe",
+      "isin": null,
+      "yahoo_ticker": null,
+      "ticker_confidence": null
+    },
+    {
+      "tase_number": "1207190",
+      "name": "Invesco EURO STOXX 50 UCITS ETF",
+      "tase_short_name": "",
+      "issuer": "Invesco",
+      "index": "EURO STOXX 50",
+      "category": "europe",
+      "replication": "unknown",
+      "accumulating": true,
+      "fee_pct": 0.05,
+      "extra_fee_pct": 0.0,
+      "fee_range": [
+        0.05,
+        0.05
+      ],
+      "tax_link": "unknown",
+      "us_share": 0.0,
+      "confidence": "medium",
+      "notes": "שיטת העקיבה לא אומתה. 50 החברות הגדולות בגוש האירו בלבד.",
+      "sources": [
+        "https://www.superfunds.ai/funds/irish"
+      ],
+      "asset_class": "equity",
+      "peer_group": "eurozone",
+      "isin": null,
+      "yahoo_ticker": null,
+      "ticker_confidence": null
+    },
+    {
+      "tase_number": "1183490",
+      "name": "Invesco MSCI Emerging Markets UCITS ETF",
+      "tase_short_name": "",
+      "issuer": "Invesco",
+      "index": "MSCI Emerging Markets",
+      "category": "emerging",
+      "replication": "synthetic",
+      "accumulating": true,
+      "fee_pct": 0.09,
+      "extra_fee_pct": 0.0,
+      "fee_range": [
+        0.09,
+        0.19
+      ],
+      "tax_link": "unknown",
+      "us_share": 0.0,
+      "confidence": "medium",
+      "notes": "המקורות חלוקים על דמי הניהול: 0.09 או 0.19.",
+      "sources": [
+        "https://tradingil.co.il/קרן-אירית/",
+        "https://moneyplan.co.il/irish-etf-exchange-traded-fund/",
+        "https://www.superfunds.ai/funds/irish"
+      ],
+      "asset_class": "equity",
+      "peer_group": "emerging",
+      "isin": null,
+      "yahoo_ticker": null,
+      "ticker_confidence": null
+    },
+    {
+      "tase_number": "1159169",
+      "name": "iShares Core MSCI EM IMI UCITS ETF",
+      "tase_short_name": "אשס.חוץ MSCI EM",
+      "issuer": "iShares",
+      "index": "MSCI Emerging Markets IMI",
+      "category": "emerging",
+      "replication": "physical",
+      "accumulating": true,
+      "fee_pct": 0.18,
+      "extra_fee_pct": 0.0,
+      "fee_range": [
+        0.18,
+        0.18
+      ],
+      "tax_link": "unknown",
+      "us_share": 0.0,
+      "confidence": "high",
+      "notes": "שווקים מתפתחים כולל חברות קטנות.",
+      "sources": [
+        "https://tradingil.co.il/קרן-אירית/",
+        "https://moneyplan.co.il/irish-etf-exchange-traded-fund/",
+        "https://www.superfunds.ai/funds/irish"
+      ],
+      "asset_class": "equity",
+      "peer_group": "emerging",
+      "isin": null,
+      "yahoo_ticker": "EIMI.L",
+      "ticker_confidence": "likely"
+    },
+    {
+      "tase_number": "1186071",
+      "name": "Invesco MSCI China All Shares Stock Connect UCITS ETF",
+      "tase_short_name": "",
+      "issuer": "Invesco",
+      "index": "MSCI China All Shares",
+      "category": "country",
+      "replication": "unknown",
+      "accumulating": true,
+      "fee_pct": 0.35,
+      "extra_fee_pct": 0.0,
+      "fee_range": [
+        0.35,
+        0.35
+      ],
+      "tax_link": "unknown",
+      "us_share": 0.0,
+      "confidence": "medium",
+      "notes": "שיטת העקיבה לא אומתה.",
+      "sources": [
+        "https://www.superfunds.ai/funds/irish"
+      ],
+      "asset_class": "equity",
+      "peer_group": "china",
+      "isin": null,
+      "yahoo_ticker": null,
+      "ticker_confidence": null
+    },
+    {
+      "tase_number": "1159110",
+      "name": "iShares MSCI China A UCITS ETF",
+      "tase_short_name": "",
+      "issuer": "iShares",
+      "index": "MSCI China A",
+      "category": "country",
+      "replication": "physical",
+      "accumulating": true,
+      "fee_pct": 0.4,
+      "extra_fee_pct": 0.0,
+      "fee_range": [
+        0.4,
+        0.4
+      ],
+      "tax_link": "unknown",
+      "us_share": 0.0,
+      "confidence": "medium",
+      "notes": "",
+      "sources": [
+        "https://www.superfunds.ai/funds/irish"
+      ],
+      "asset_class": "equity",
+      "peer_group": "china",
+      "isin": null,
+      "yahoo_ticker": null,
+      "ticker_confidence": null
     },
     {
       "tase_number": "1248384",
@@ -286,12 +719,554 @@
       "accumulating": true,
       "fee_pct": 0.65,
       "extra_fee_pct": 0.0,
-      "fee_range": [0.65, 0.65],
+      "fee_range": [
+        0.65,
+        0.65
+      ],
       "tax_link": "unknown",
       "us_share": 0.0,
       "confidence": "medium",
       "notes": "נרשמה למסחר ב-5.11.2026. קרן מדינה, תוספת לתיק ולא בסיס.",
-      "sources": ["https://moneyplan.co.il/קרנות-סל-איריות-חדשות-בלאקרוק/", "https://shukist.co.il/article/1fc80b6d-67b5-41ec-aedf-7d3c0bf13f71"]
+      "sources": [
+        "https://moneyplan.co.il/קרנות-סל-איריות-חדשות-בלאקרוק/",
+        "https://shukist.co.il/article/1fc80b6d-67b5-41ec-aedf-7d3c0bf13f71"
+      ],
+      "asset_class": "equity",
+      "peer_group": "india",
+      "isin": null,
+      "yahoo_ticker": null,
+      "ticker_confidence": null
+    },
+    {
+      "tase_number": "1248376",
+      "name": "iShares MSCI Global Semiconductors UCITS ETF",
+      "tase_short_name": "",
+      "issuer": "iShares",
+      "index": "MSCI Global Semiconductors",
+      "category": "sector",
+      "replication": "physical",
+      "accumulating": true,
+      "fee_pct": 0.35,
+      "extra_fee_pct": 0.0,
+      "fee_range": [
+        0.35,
+        0.35
+      ],
+      "tax_link": "unknown",
+      "us_share": 0.7,
+      "confidence": "medium",
+      "notes": "נרשמה למסחר ב-5.11.2026. קרן ענפית, תוספת לתיק ולא בסיס. שיעור ארה\"ב הוא הערכה גסה.",
+      "sources": [
+        "https://moneyplan.co.il/קרנות-סל-איריות-חדשות-בלאקרוק/",
+        "https://shukist.co.il/article/1fc80b6d-67b5-41ec-aedf-7d3c0bf13f71"
+      ],
+      "asset_class": "equity",
+      "peer_group": "semis",
+      "isin": null,
+      "yahoo_ticker": null,
+      "ticker_confidence": null
+    },
+    {
+      "tase_number": "1248368",
+      "name": "iShares S&P 500 Energy Sector UCITS ETF",
+      "tase_short_name": "",
+      "issuer": "iShares",
+      "index": "S&P 500 Energy",
+      "category": "sector",
+      "replication": "physical",
+      "accumulating": true,
+      "fee_pct": 0.15,
+      "extra_fee_pct": 0.0,
+      "fee_range": [
+        0.15,
+        0.15
+      ],
+      "tax_link": "unknown",
+      "us_share": 1.0,
+      "confidence": "medium",
+      "notes": "נרשמה למסחר ב-5.11.2026. קרן ענפית, תוספת לתיק ולא בסיס.",
+      "sources": [
+        "https://moneyplan.co.il/קרנות-סל-איריות-חדשות-בלאקרוק/",
+        "https://shukist.co.il/article/1fc80b6d-67b5-41ec-aedf-7d3c0bf13f71"
+      ],
+      "asset_class": "equity",
+      "peer_group": "us_energy",
+      "isin": null,
+      "yahoo_ticker": null,
+      "ticker_confidence": null
+    },
+    {
+      "tase_number": "1186055",
+      "name": "Invesco CoinShares Global Blockchain UCITS ETF",
+      "tase_short_name": "",
+      "issuer": "Invesco",
+      "index": "CoinShares Blockchain Global Equity",
+      "category": "thematic",
+      "replication": "unknown",
+      "accumulating": true,
+      "fee_pct": 0.65,
+      "extra_fee_pct": 0.0,
+      "fee_range": [
+        0.65,
+        0.65
+      ],
+      "tax_link": "unknown",
+      "us_share": null,
+      "confidence": "medium",
+      "notes": "שיטת העקיבה לא אומתה.",
+      "sources": [
+        "https://www.superfunds.ai/funds/irish"
+      ],
+      "asset_class": "equity",
+      "peer_group": "thematic_blockchain",
+      "isin": null,
+      "yahoo_ticker": null,
+      "ticker_confidence": null
+    },
+    {
+      "tase_number": "1159136",
+      "name": "iShares Digitalisation UCITS ETF",
+      "tase_short_name": "איישרס.חוץ DIGITALISATION",
+      "issuer": "iShares",
+      "index": "Digitalisation thematic",
+      "category": "thematic",
+      "replication": "physical",
+      "accumulating": true,
+      "fee_pct": 0.4,
+      "extra_fee_pct": 0.0,
+      "fee_range": [
+        0.4,
+        0.4
+      ],
+      "tax_link": "unknown",
+      "us_share": null,
+      "confidence": "medium",
+      "notes": "",
+      "sources": [
+        "https://www.superfunds.ai/funds/irish",
+        "https://market.tase.co.il/he/market_data/security/1159136/major_data"
+      ],
+      "asset_class": "equity",
+      "peer_group": "thematic_digital",
+      "isin": null,
+      "yahoo_ticker": null,
+      "ticker_confidence": null
+    },
+    {
+      "tase_number": "1183482",
+      "name": "Invesco KBW NASDAQ Fintech UCITS ETF",
+      "tase_short_name": "",
+      "issuer": "Invesco",
+      "index": "KBW Nasdaq Financial Technology",
+      "category": "thematic",
+      "replication": "unknown",
+      "accumulating": true,
+      "fee_pct": 0.49,
+      "extra_fee_pct": 0.0,
+      "fee_range": [
+        0.49,
+        0.49
+      ],
+      "tax_link": "unknown",
+      "us_share": null,
+      "confidence": "medium",
+      "notes": "שיטת העקיבה לא אומתה.",
+      "sources": [
+        "https://www.superfunds.ai/funds/irish"
+      ],
+      "asset_class": "equity",
+      "peer_group": "thematic_fintech",
+      "isin": null,
+      "yahoo_ticker": null,
+      "ticker_confidence": null
+    },
+    {
+      "tase_number": "1159128",
+      "name": "iShares Healthcare Innovation UCITS ETF",
+      "tase_short_name": "",
+      "issuer": "iShares",
+      "index": "Healthcare Innovation thematic",
+      "category": "thematic",
+      "replication": "physical",
+      "accumulating": true,
+      "fee_pct": 0.4,
+      "extra_fee_pct": 0.0,
+      "fee_range": [
+        0.4,
+        0.4
+      ],
+      "tax_link": "unknown",
+      "us_share": null,
+      "confidence": "medium",
+      "notes": "",
+      "sources": [
+        "https://www.superfunds.ai/funds/irish"
+      ],
+      "asset_class": "equity",
+      "peer_group": "thematic_health",
+      "isin": null,
+      "yahoo_ticker": null,
+      "ticker_confidence": null
+    },
+    {
+      "tase_number": "1159144",
+      "name": "iShares Automation & Robotics UCITS ETF",
+      "tase_short_name": "",
+      "issuer": "iShares",
+      "index": "Automation and Robotics thematic",
+      "category": "thematic",
+      "replication": "physical",
+      "accumulating": true,
+      "fee_pct": 0.4,
+      "extra_fee_pct": 0.0,
+      "fee_range": [
+        0.4,
+        0.4
+      ],
+      "tax_link": "unknown",
+      "us_share": null,
+      "confidence": "medium",
+      "notes": "",
+      "sources": [
+        "https://www.superfunds.ai/funds/irish"
+      ],
+      "asset_class": "equity",
+      "peer_group": "thematic_robotics",
+      "isin": null,
+      "yahoo_ticker": null,
+      "ticker_confidence": null
+    },
+    {
+      "tase_number": "1159102",
+      "name": "iShares Core Global Aggregate Bond UCITS ETF USD Hedged (Acc)",
+      "tase_short_name": "איישרס.חGLBBOND",
+      "issuer": "iShares",
+      "index": "Bloomberg Global Aggregate Bond, USD Hedged",
+      "category": "bond_global",
+      "replication": "physical",
+      "accumulating": true,
+      "fee_pct": 0.1,
+      "extra_fee_pct": 0.0,
+      "fee_range": [
+        0.1,
+        0.1
+      ],
+      "tax_link": "unknown",
+      "us_share": null,
+      "confidence": "medium",
+      "notes": "אגח ממשלתי וקונצרני מכל העולם. מגודרת לדולר, ולכן משקיע שקלי נשאר חשוף לשער הדולר.",
+      "sources": [
+        "https://www.superfunds.ai/funds/irish",
+        "https://www.superfunds.ai/categories/irish-bonds",
+        "https://il.investing.com/etfs/ishares-glbl-aggr-bd-hedged-acc-scoreboard?cid=1148209"
+      ],
+      "asset_class": "bond",
+      "peer_group": "bond_global_agg",
+      "isin": "IE00BZ043R46",
+      "yahoo_ticker": "AGGU.L",
+      "ticker_confidence": "verified"
+    },
+    {
+      "tase_number": "1159060",
+      "name": "iShares $ TIPS UCITS ETF",
+      "tase_short_name": "איישרס.חTIPS",
+      "issuer": "iShares",
+      "index": "US Inflation-Linked Treasury",
+      "category": "bond_us_gov",
+      "replication": "physical",
+      "accumulating": true,
+      "fee_pct": 0.1,
+      "extra_fee_pct": 0.0,
+      "fee_range": [
+        0.1,
+        0.1
+      ],
+      "tax_link": "unknown",
+      "us_share": null,
+      "confidence": "medium",
+      "notes": "",
+      "sources": [
+        "https://www.superfunds.ai/funds/irish",
+        "https://www.superfunds.ai/categories/irish-bonds"
+      ],
+      "asset_class": "bond",
+      "peer_group": "bond_tips",
+      "isin": null,
+      "yahoo_ticker": null,
+      "ticker_confidence": null
+    },
+    {
+      "tase_number": "1159268",
+      "name": "iShares $ Treasury Bond 7-10yr UCITS ETF",
+      "tase_short_name": "איישרס.חUST7-10",
+      "issuer": "iShares",
+      "index": "US Treasury 7-10 Year",
+      "category": "bond_us_gov",
+      "replication": "physical",
+      "accumulating": true,
+      "fee_pct": 0.07,
+      "extra_fee_pct": 0.0,
+      "fee_range": [
+        0.07,
+        0.07
+      ],
+      "tax_link": "unknown",
+      "us_share": null,
+      "confidence": "medium",
+      "notes": "",
+      "sources": [
+        "https://www.superfunds.ai/funds/irish",
+        "https://www.superfunds.ai/categories/irish-bonds"
+      ],
+      "asset_class": "bond",
+      "peer_group": "bond_ust_long",
+      "isin": null,
+      "yahoo_ticker": null,
+      "ticker_confidence": null
+    },
+    {
+      "tase_number": "1159276",
+      "name": "iShares $ Treasury Bond 3-7yr UCITS ETF",
+      "tase_short_name": "איישרס.חUST3-7Y",
+      "issuer": "iShares",
+      "index": "US Treasury 3-7 Year",
+      "category": "bond_us_gov",
+      "replication": "physical",
+      "accumulating": true,
+      "fee_pct": 0.07,
+      "extra_fee_pct": 0.0,
+      "fee_range": [
+        0.07,
+        0.07
+      ],
+      "tax_link": "unknown",
+      "us_share": null,
+      "confidence": "medium",
+      "notes": "",
+      "sources": [
+        "https://www.superfunds.ai/funds/irish",
+        "https://www.superfunds.ai/categories/irish-bonds"
+      ],
+      "asset_class": "bond",
+      "peer_group": "bond_ust_mid",
+      "isin": null,
+      "yahoo_ticker": null,
+      "ticker_confidence": null
+    },
+    {
+      "tase_number": "1159177",
+      "name": "iShares $ Treasury Bond 1-3yr UCITS ETF",
+      "tase_short_name": "איישרס.חUST1-3Y",
+      "issuer": "iShares",
+      "index": "US Treasury 1-3 Year",
+      "category": "bond_us_gov",
+      "replication": "physical",
+      "accumulating": true,
+      "fee_pct": 0.07,
+      "extra_fee_pct": 0.0,
+      "fee_range": [
+        0.07,
+        0.07
+      ],
+      "tax_link": "unknown",
+      "us_share": null,
+      "confidence": "medium",
+      "notes": "",
+      "sources": [
+        "https://www.superfunds.ai/funds/irish",
+        "https://www.superfunds.ai/categories/irish-bonds",
+        "https://www.globes.co.il/portal/instrument.aspx?instrumentid=276596"
+      ],
+      "asset_class": "bond",
+      "peer_group": "bond_ust_short",
+      "isin": null,
+      "yahoo_ticker": null,
+      "ticker_confidence": null
+    },
+    {
+      "tase_number": "1185206",
+      "name": "Invesco AT1 Capital Bond UCITS ETF",
+      "tase_short_name": "אינ.חוץIBOXX",
+      "issuer": "Invesco",
+      "index": "iBoxx USD Contingent Convertible AT1",
+      "category": "bond_corp",
+      "replication": "unknown",
+      "accumulating": true,
+      "fee_pct": 0.39,
+      "extra_fee_pct": 0.0,
+      "fee_range": [
+        0.39,
+        0.39
+      ],
+      "tax_link": "unknown",
+      "us_share": null,
+      "confidence": "medium",
+      "notes": "שיטת העקיבה לא אומתה. אגח בנקאי נחות מסוג CoCo. מוצר מורכב, לא רכיב סולידי.",
+      "sources": [
+        "https://www.superfunds.ai/funds/irish",
+        "https://www.superfunds.ai/categories/irish-bonds"
+      ],
+      "asset_class": "bond",
+      "peer_group": "bond_at1",
+      "isin": null,
+      "yahoo_ticker": null,
+      "ticker_confidence": null
+    },
+    {
+      "tase_number": "1159086",
+      "name": "iShares $ Floating Rate Bond UCITS ETF",
+      "tase_short_name": "איישרס.חFLOAT",
+      "issuer": "iShares",
+      "index": "US Floating Rate Notes",
+      "category": "bond_corp",
+      "replication": "physical",
+      "accumulating": true,
+      "fee_pct": 0.1,
+      "extra_fee_pct": 0.0,
+      "fee_range": [
+        0.1,
+        0.1
+      ],
+      "tax_link": "unknown",
+      "us_share": null,
+      "confidence": "medium",
+      "notes": "",
+      "sources": [
+        "https://www.superfunds.ai/funds/irish",
+        "https://www.superfunds.ai/categories/irish-bonds"
+      ],
+      "asset_class": "bond",
+      "peer_group": "bond_float",
+      "isin": null,
+      "yahoo_ticker": null,
+      "ticker_confidence": null
+    },
+    {
+      "tase_number": "1159078",
+      "name": "iShares $ High Yield Corp Bond UCITS ETF",
+      "tase_short_name": "איישרס.חHY BOND",
+      "issuer": "iShares",
+      "index": "USD High Yield Corporate",
+      "category": "bond_corp",
+      "replication": "physical",
+      "accumulating": true,
+      "fee_pct": 0.5,
+      "extra_fee_pct": 0.0,
+      "fee_range": [
+        0.5,
+        0.5
+      ],
+      "tax_link": "unknown",
+      "us_share": null,
+      "confidence": "medium",
+      "notes": "אגח בדירוג נמוך. מתנהג חלקית כמו מניות.",
+      "sources": [
+        "https://www.superfunds.ai/funds/irish",
+        "https://www.superfunds.ai/categories/irish-bonds"
+      ],
+      "asset_class": "bond",
+      "peer_group": "bond_high_yield",
+      "isin": null,
+      "yahoo_ticker": null,
+      "ticker_confidence": null
+    },
+    {
+      "tase_number": "1159185",
+      "name": "iShares $ Corp Bond UCITS ETF",
+      "tase_short_name": "איישרס.חCORPBND",
+      "issuer": "iShares",
+      "index": "USD Investment Grade Corporate",
+      "category": "bond_corp",
+      "replication": "physical",
+      "accumulating": true,
+      "fee_pct": 0.2,
+      "extra_fee_pct": 0.0,
+      "fee_range": [
+        0.2,
+        0.2
+      ],
+      "tax_link": "unknown",
+      "us_share": null,
+      "confidence": "medium",
+      "notes": "",
+      "sources": [
+        "https://www.superfunds.ai/funds/irish",
+        "https://www.superfunds.ai/categories/irish-bonds"
+      ],
+      "asset_class": "bond",
+      "peer_group": "bond_us_corp",
+      "isin": null,
+      "yahoo_ticker": null,
+      "ticker_confidence": null
+    },
+    {
+      "tase_number": "1159151",
+      "name": "iShares $ Short Duration Corp Bond UCITS ETF",
+      "tase_short_name": "איישרס.חSHRTDUR",
+      "issuer": "iShares",
+      "index": "USD Short Duration Corporate",
+      "category": "bond_corp",
+      "replication": "physical",
+      "accumulating": true,
+      "fee_pct": 0.2,
+      "extra_fee_pct": 0.0,
+      "fee_range": [
+        0.2,
+        0.2
+      ],
+      "tax_link": "unknown",
+      "us_share": null,
+      "confidence": "medium",
+      "notes": "",
+      "sources": [
+        "https://www.superfunds.ai/funds/irish",
+        "https://www.superfunds.ai/categories/irish-bonds"
+      ],
+      "asset_class": "bond",
+      "peer_group": "bond_us_corp_short",
+      "isin": null,
+      "yahoo_ticker": null,
+      "ticker_confidence": null
+    },
+    {
+      "tase_number": "1158989",
+      "name": "iShares J.P. Morgan $ EM Bond UCITS ETF",
+      "tase_short_name": "איישרס.ח$ EMBON",
+      "issuer": "iShares",
+      "index": "J.P. Morgan EMBI Global Core",
+      "category": "bond_em",
+      "replication": "physical",
+      "accumulating": true,
+      "fee_pct": 0.45,
+      "extra_fee_pct": 0.0,
+      "fee_range": [
+        0.45,
+        0.45
+      ],
+      "tax_link": "unknown",
+      "us_share": null,
+      "confidence": "medium",
+      "notes": "",
+      "sources": [
+        "https://www.superfunds.ai/funds/irish"
+      ],
+      "asset_class": "bond",
+      "peer_group": "bond_em",
+      "isin": null,
+      "yahoo_ticker": null,
+      "ticker_confidence": null
+    }
+  ],
+  "non_irish_references": [
+    {
+      "id": "il_sp900_pure_value_hedged",
+      "tase_number": "5133681",
+      "name": "תכלית TTF S&P 900 Pure Value מנוטרלת מטח",
+      "kind": "קרן נאמנות ישראלית מחקה",
+      "note": "קרן ישראלית ולא אירית. מופיעה כדוגמה לקרן ערך. דמי ניהול ותנאים לא נאספו.",
+      "sources": [
+        "https://www.globes.co.il/portal/instrument.aspx?instrumentid=360058"
+      ]
     }
   ]
 }

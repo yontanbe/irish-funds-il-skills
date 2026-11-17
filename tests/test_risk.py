@@ -94,7 +94,6 @@ def test_every_possible_answer_combination(data):
         r = score_risk(dict(zip(ids, combo)), q)
         assert r["equity_pct"] in allowed_equity
         assert 0 <= r["pct"] <= 100
-        assert r["tech_pct_of_equity"] in {10, 15, 20, 25}
         seen_profiles.add(r["profile_id"])
         count += 1
     assert count == 5 * 4 ** 6

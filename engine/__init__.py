@@ -1,5 +1,6 @@
 from .core import (  # noqa: F401
     DISCLAIMER,
+    alternatives,
     build_portfolio,
     checkup,
     fee_drag,

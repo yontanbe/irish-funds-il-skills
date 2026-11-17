@@ -11,34 +11,34 @@ def test_total_cost_adds_swap_fee(data):
 
 
 def test_rebalance_targets_and_deltas(data):
-    target = build_portfolio("shlosha-ezorim", 100, 10, data["portfolios"])
-    rows = rebalance({"1159250": 70000, "1159094": 20000, "1159169": 10000}, target["lines"])
+    target = build_portfolio("olami-ve-agach", 70, data["portfolios"])
+    rows = rebalance({"1209220": 80000, "1159102": 20000}, target["lines"])
     assert [(r["key"], r["target"], r["delta"]) for r in rows] == [
-        ("1159250", 60000.0, -10000.0), ("1159094", 25000.0, 5000.0), ("1159169", 15000.0, 5000.0)]
+        ("1209220", 70000.0, -10000.0), ("1159102", 30000.0, 10000.0)]
     assert sum(r["delta"] for r in rows) == 0
 
 
 def test_rebalance_with_deposit_sums_to_deposit(data):
-    target = build_portfolio("shlosha-ezorim", 100, 10, data["portfolios"])
-    rows = rebalance({"1159250": 70000, "1159094": 20000, "1159169": 10000}, target["lines"], deposit=5000)
+    target = build_portfolio("triathlon", 100, data["portfolios"])
+    rows = rebalance({"1159193": 50000, "1159250": 30000, "1209220": 20000}, target["lines"], deposit=5000)
     assert round(sum(r["delta"] for r in rows), 2) == 5000
     assert round(sum(r["target"] for r in rows), 2) == 105000
 
 
 def test_rebalance_from_empty_portfolio_follows_weights(data):
-    target = build_portfolio("olami-plus-mitpatchim", 100, 10, data["portfolios"])
+    target = build_portfolio("olami-ve-agach", 85, data["portfolios"])
     rows = rebalance({}, target["lines"], deposit=10000)
     assert [r["delta"] for r in rows] == [8500.0, 1500.0]
 
 
 def test_rebalance_handles_solid_slot_by_slot_name(data):
-    target = build_portfolio("olami-ehad", 70, 10, data["portfolios"])
+    target = build_portfolio("olami-ehad", 70, data["portfolios"])
     rows = rebalance({"1209220": 50000, "solid": 50000}, target["lines"])
     assert {r["key"]: r["delta"] for r in rows} == {"1209220": 20000.0, "solid": -20000.0}
 
 
 def test_rebalance_rejects_negative_values(data):
-    target = build_portfolio("olami-ehad", 100, 10, data["portfolios"])
+    target = build_portfolio("olami-ehad", 100, data["portfolios"])
     with pytest.raises(ValueError):
         rebalance({"1209220": -1}, target["lines"])
     with pytest.raises(ValueError):
@@ -57,18 +57,31 @@ def test_checkup_weights_cost_and_us_share(data):
 def test_checkup_flags_us_and_tech_concentration(data):
     r = checkup({"1159250": 60000, "1159243": 40000}, data["funds"])
     assert any("80 אחוז" in w for w in r["warnings"])
-    assert any("נאסדק" in w for w in r["warnings"])
+    assert any("טכנולוגיה" in w for w in r["warnings"])
 
 
 def test_checkup_flags_duplicate_index(data):
     r = checkup({"1159250": 50000, "1183441": 50000}, data["funds"])
-    assert any("אותו מדד" in w for w in r["warnings"])
+    assert any("אותו סוג מדד" in w for w in r["warnings"])
     assert r["synthetic_weight_pct"] == 50.0
 
 
 def test_checkup_flags_sector_overweight(data):
-    r = checkup({"1209220": 80000, "1248376": 20000}, data["funds"])
-    assert any("ענף או מדינה" in w for w in r["warnings"])
+    r = checkup({"1209220": 80000, "1248384": 20000}, data["funds"])
+    assert any("ענף, מדינה או נושא" in w for w in r["warnings"])
+
+
+def test_checkup_counts_sector_tech_as_tech_not_as_satellite(data):
+    r = checkup({"1209220": 60000, "1159193": 40000}, data["funds"])
+    assert any("טכנולוגיה" in w for w in r["warnings"])
+    assert not any("ענף, מדינה או נושא" in w for w in r["warnings"])
+
+
+def test_checkup_reports_bond_share_and_excludes_it_from_us_share(data):
+    r = checkup({"1159250": 50000, "1159102": 50000}, data["funds"])
+    assert r["bond_weight_pct"] == 50.0
+    assert r["us_share_pct"] == 100.0
+    assert r["weighted_cost_pct"] == 0.085
 
 
 def test_checkup_reports_unknown_fund_and_excludes_it(data):
