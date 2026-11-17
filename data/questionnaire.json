@@ -1,0 +1,99 @@
+{
+  "questions": [
+    {
+      "id": "horizon",
+      "text": "בעוד כמה זמן תצטרכו את הכסף הזה?",
+      "help": "טווח ההשקעה הוא השאלה הכי חשובה. ככל שיש יותר זמן, יש יותר זמן להתאושש מירידות.",
+      "options": [
+        {"id": "lt3", "text": "פחות מ-3 שנים", "points": 0},
+        {"id": "3to5", "text": "3 עד 5 שנים", "points": 1},
+        {"id": "5to10", "text": "5 עד 10 שנים", "points": 2},
+        {"id": "10to20", "text": "10 עד 20 שנה", "points": 3},
+        {"id": "gt20", "text": "יותר מ-20 שנה", "points": 4}
+      ]
+    },
+    {
+      "id": "drop",
+      "text": "התיק שלכם ירד 30 אחוז בתוך כמה חודשים. מה תעשו?",
+      "help": "ירידות כאלה קרו בעבר ויקרו שוב. התשובה הכנה חשובה יותר מהתשובה היפה.",
+      "options": [
+        {"id": "sell_all", "text": "מוכר הכל כדי לעצור את ההפסד", "points": 0},
+        {"id": "sell_some", "text": "מוכר חלק כדי לישון בשקט", "points": 1},
+        {"id": "hold", "text": "לא נוגע וממשיך כרגיל", "points": 3},
+        {"id": "buy", "text": "ממשיך להפקיד ואפילו מוסיף", "points": 4}
+      ]
+    },
+    {
+      "id": "emergency",
+      "text": "יש לכם כרית ביטחון נזילה בצד?",
+      "help": "כסף זמין להוצאות של כמה חודשים, שלא מושקע במניות.",
+      "options": [
+        {"id": "none", "text": "אין", "points": 0},
+        {"id": "lt3m", "text": "פחות מ-3 חודשי הוצאות", "points": 1},
+        {"id": "3to6m", "text": "3 עד 6 חודשי הוצאות", "points": 3},
+        {"id": "gt6m", "text": "יותר מ-6 חודשי הוצאות", "points": 4}
+      ]
+    },
+    {
+      "id": "income",
+      "text": "כמה יציבה ההכנסה שלכם?",
+      "help": "הכנסה יציבה מאפשרת להמשיך להפקיד גם כשהשוק יורד.",
+      "options": [
+        {"id": "unstable", "text": "לא יציבה או שאין כרגע", "points": 0},
+        {"id": "varies", "text": "משתנה מחודש לחודש", "points": 2},
+        {"id": "stable", "text": "יציבה", "points": 3},
+        {"id": "very_stable", "text": "יציבה מאוד ויש עודף חודשי קבוע", "points": 4}
+      ]
+    },
+    {
+      "id": "experience",
+      "text": "מה הניסיון שלכם בשוק ההון?",
+      "help": "אין תשובה לא נכונה. מי שמתחיל צריך פשוט תיק פשוט יותר.",
+      "options": [
+        {"id": "none", "text": "אף פעם לא השקעתי", "points": 1},
+        {"id": "some", "text": "יש לי קרן או פנסיה שאני עוקב אחריה", "points": 2},
+        {"id": "years", "text": "משקיע בעצמי כמה שנים", "points": 3},
+        {"id": "crisis", "text": "עברתי ירידה גדולה ולא מכרתי", "points": 4}
+      ]
+    },
+    {
+      "id": "share",
+      "text": "איזה חלק מהחסכונות שלכם הכסף הזה?",
+      "help": "ככל שזה חלק קטן יותר, ירידה בו פוגעת פחות.",
+      "options": [
+        {"id": "all", "text": "כמעט כל מה שיש לי", "points": 0},
+        {"id": "most", "text": "רוב החסכונות", "points": 1},
+        {"id": "half", "text": "בערך חצי", "points": 3},
+        {"id": "small", "text": "חלק קטן", "points": 4}
+      ]
+    },
+    {
+      "id": "goal",
+      "text": "מה חשוב לכם יותר?",
+      "help": "אין אפשרות שנותנת גם תשואה גבוהה וגם בלי ירידות.",
+      "options": [
+        {"id": "preserve", "text": "לא להפסיד, גם במחיר של תשואה נמוכה", "points": 0},
+        {"id": "balance", "text": "איזון בין צמיחה ליציבות", "points": 2},
+        {"id": "growth", "text": "צמיחה, ואני מקבל תנודות", "points": 3},
+        {"id": "max", "text": "מקסימום צמיחה לטווח ארוך, תנודות לא מפריעות לי", "points": 4}
+      ]
+    }
+  ],
+  "profiles": [
+    {"id": "conservative", "name": "שמרני", "min_pct": 0, "equity_pct": 30, "tech_pct_of_equity": 10},
+    {"id": "moderate", "name": "מתון", "min_pct": 30, "equity_pct": 50, "tech_pct_of_equity": 10},
+    {"id": "balanced", "name": "מאוזן", "min_pct": 50, "equity_pct": 70, "tech_pct_of_equity": 15},
+    {"id": "growth", "name": "צמיחה", "min_pct": 68, "equity_pct": 85, "tech_pct_of_equity": 20},
+    {"id": "aggressive", "name": "אגרסיבי", "min_pct": 85, "equity_pct": 100, "tech_pct_of_equity": 25}
+  ],
+  "caps": [
+    {"question": "horizon", "option": "lt3", "max_equity_pct": 30, "warning": "טווח של פחות מ-3 שנים קצר מדי לחשיפה גבוהה למניות. החלק המנייתי הוגבל ל-30 אחוז."},
+    {"question": "horizon", "option": "3to5", "max_equity_pct": 50, "warning": "בטווח של 3 עד 5 שנים החלק המנייתי הוגבל ל-50 אחוז."},
+    {"question": "drop", "option": "sell_all", "max_equity_pct": 50, "warning": "מי שמוכר בירידה נועל הפסד. החלק המנייתי הוגבל ל-50 אחוז כדי שהירידות יהיו נסבלות."}
+  ],
+  "warnings": [
+    {"question": "emergency", "option": "none", "warning": "אין כרית ביטחון. מקובל לבנות קודם כרית נזילה ורק אחר כך להשקיע במניות."},
+    {"question": "income", "option": "unstable", "warning": "הכנסה לא יציבה מגדילה את הסיכוי שתצטרכו למשוך בזמן ירידה."},
+    {"question": "share", "option": "all", "warning": "כמעט כל החסכונות בתיק אחד. שווה לשקול להשאיר חלק בצד."}
+  ]
+}

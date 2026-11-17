@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>בונה התיק | קרנות איריות בתל אביב</title>
+<meta name="description" content="כלי מחקר חינמי בקוד פתוח לקרנות איריות צוברות שנסחרות בבורסה בתל אביב.">
+<style>
+:root{--bg:#f6f4ef;--card:#fff;--ink:#1c2321;--muted:#5b6663;--line:#d9d5cb;--accent:#0b6e4f;--accent-ink:#fff;--warn-bg:#fff4d6;--warn-ink:#5c4400;--focus:#1a56db}
+@media (prefers-color-scheme:dark){:root{--bg:#121615;--card:#1b2120;--ink:#eef2f0;--muted:#a9b4b0;--line:#33403c;--accent:#4fd1a1;--accent-ink:#06231a;--warn-bg:#3a3110;--warn-ink:#ffe69a;--focus:#8ab4ff}}
+*{box-sizing:border-box}
+html{font-size:112.5%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;line-height:1.65}
+main{max-width:46rem;margin:0 auto;padding:1.25rem 1rem 4rem}
+h1{font-size:1.7rem;line-height:1.25;margin:.5rem 0 .25rem}
+h2{font-size:1.25rem;margin:2rem 0 .5rem}
+p{margin:.5rem 0}
+a{color:var(--accent)}
+.lead{color:var(--muted)}
+nav.top{display:flex;gap:.5rem;flex-wrap:wrap;margin:0 0 1rem;padding:0;list-style:none}
+nav.top a{display:inline-block;padding:.45rem .8rem;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--ink);background:var(--card);min-height:44px;line-height:1.6}
+nav.top a[aria-current=page]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem 1.1rem;margin:1rem 0}
+fieldset{border:0;padding:0;margin:0}
+legend{font-weight:700;font-size:1.1rem;padding:0;margin-bottom:.2rem}
+.help{color:var(--muted);font-size:.92rem;margin:0 0 .6rem}
+label.opt{display:flex;gap:.7rem;align-items:flex-start;padding:.7rem .8rem;border:1px solid var(--line);border-radius:10px;margin:.4rem 0;cursor:pointer;min-height:48px}
+label.opt:has(input:checked){border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+input[type=radio]{width:1.25rem;height:1.25rem;margin-top:.2rem;accent-color:var(--accent);flex:none}
+label.fld{display:block;font-weight:600;margin:.8rem 0 .25rem}
+input[type=number],select{width:100%;font:inherit;padding:.65rem .7rem;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);min-height:48px}
+button{font:inherit;font-weight:700;padding:.8rem 1.2rem;border-radius:12px;border:0;background:var(--accent);color:var(--accent-ink);cursor:pointer;min-height:48px}
+button.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.warn{background:var(--warn-bg);color:var(--warn-ink);border-radius:10px;padding:.7rem .9rem;margin:.5rem 0}
+.disclaimer{font-size:.9rem;color:var(--muted);border-top:1px solid var(--line);margin-top:2.5rem;padding-top:1rem}
+.big{font-size:2rem;font-weight:800;line-height:1.2}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{text-align:right;padding:.55rem .6rem;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:700;white-space:nowrap}
+td.num,th.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.bar{height:.75rem;border-radius:999px;background:var(--accent);min-width:2px}
+.row{display:grid;grid-template-columns:3.2rem 1fr;gap:.7rem;align-items:center;margin:.55rem 0}
+.row .w{font-weight:800;font-variant-numeric:tabular-nums}
+.small{font-size:.88rem;color:var(--muted)}
+.progress{font-size:.9rem;color:var(--muted)}
+.btns{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main>
+<nav class="top" aria-label="ניווט ראשי"><a href="index.html">ראשי</a><a href="tik.html" aria-current="page">בונה התיק</a><a href="kranot.html">טבלת הקרנות</a><a href="dmei-nihul.html">מחשבון דמי ניהול</a></nav>
+
+<h1>בונה התיק</h1>
+<p class="lead">עונים על שבע שאלות ומקבלים תיק לדוגמה. אפשר לחזור אחורה ולשנות.</p>
+<form id="quiz" class="card" novalidate>
+  <p class="progress" id="progress" aria-live="polite"></p>
+  <div id="qbox"></div>
+  <p class="warn" id="qerr" role="alert" hidden>צריך לבחור תשובה כדי להמשיך.</p>
+  <div class="btns">
+    <button type="button" class="ghost" id="back">חזרה</button>
+    <button type="submit" id="next">המשך</button>
+  </div>
+</form>
+<section id="result" hidden aria-live="polite">
+  <div class="card">
+    <p class="small">הפרופיל שלכם לפי התשובות</p>
+    <p class="big" id="profile"></p>
+    <p id="equity"></p>
+    <div id="warnings"></div>
+  </div>
+  <div class="card">
+    <label class="fld" for="template">איזה הרכב תיק להציג</label>
+    <select id="template"></select>
+    <p class="small" id="tsummary"></p>
+    <div id="opts"></div>
+  </div>
+  <div class="card">
+    <h2 style="margin-top:0" id="ptitle"></h2>
+    <div id="lines"></div>
+    <p id="stats" class="small"></p>
+    <div id="notes"></div>
+  </div>
+  <div class="btns"><button type="button" class="ghost" id="restart">להתחיל מחדש</button></div>
+</section>
+
+<p class="disclaimer" role="note">הכלי נועד למחקר וללימוד עצמי בלבד. הוא אינו ייעוץ השקעות, אינו שיווק השקעות ואינו תחליף לייעוץ שמתחשב בנתונים ובצרכים של כל אדם. כל החלטה היא באחריותכם.</p>
+</main>
+<script>window.IF_DATA={"funds": {"meta": {"checked_at": "2026-11-17", "note": "הנתונים נאספו ממקורות משניים ברשת ולא מאתר הבורסה עצמו. דמי ניהול ועמלות משתנים. לפני כל פעולה יש לאמת כל קרן בעמוד שלה במאיה או באתר הבורסה.", "verify_url_template": "https://maya.tase.co.il/he/funds/etf/{tase_number}"}, "funds": [{"tase_number": "1159250", "name": "iShares Core S&P 500 UCITS ETF", "tase_short_name": "אשס.חוץ SPX 500", "issuer": "iShares", "index": "S&P 500", "category": "us_large", "replication": "physical", "accumulating": true, "fee_pct": 0.07, "extra_fee_pct": 0.0, "fee_range": [0.07, 0.07], "tax_link": "usd", "us_share": 1.0, "confidence": "high", "notes": "ISIN IE00B5BMR087. נסחרת באירופה בסימול CSPX.", "sources": ["https://tradingil.co.il/קרן-אירית/", "https://moneyplan.co.il/irish-etf-exchange-traded-fund/", "https://www.funder.co.il/etf/1159250"]}, {"tase_number": "1183441", "name": "Invesco S&P 500 UCITS ETF", "tase_short_name": "אינ.חוץ S&P500", "issuer": "Invesco", "index": "S&P 500", "category": "us_large", "replication": "synthetic", "accumulating": true, "fee_pct": 0.05, "extra_fee_pct": 0.07, "fee_range": [0.05, 0.05], "tax_link": "cpi", "us_share": 1.0, "confidence": "high", "notes": "עמלת ה-SWAP משתנה ואינה בשליטת הקרן. דווח שעלתה מ-0.04 ל-0.07.", "sources": ["https://tradingil.co.il/קרן-אירית/", "https://moneyplan.co.il/irish-etf-exchange-traded-fund/", "https://www.funder.co.il/etf/1183441"]}, {"tase_number": "1207208", "name": "Invesco S&P 500 Equal Weight UCITS ETF Acc", "tase_short_name": "", "issuer": "Invesco", "index": "S&P 500 Equal Weight", "category": "us_equal_weight", "replication": "physical", "accumulating": true, "fee_pct": 0.2, "extra_fee_pct": 0.0, "fee_range": [0.2, 0.2], "tax_link": "cpi", "us_share": 1.0, "confidence": "medium", "notes": "ISIN IE00BNGJJT35. כל מניה במדד מקבלת משקל דומה, בערך 0.2 אחוז.", "sources": ["https://lazyinvestor.co.il/equal-weight/", "https://il.investing.com/etfs/speq?cid=1220156"]}, {"tase_number": "1159243", "name": "iShares NASDAQ 100 UCITS ETF", "tase_short_name": "", "issuer": "iShares", "index": "NASDAQ 100", "category": "us_tech", "replication": "physical", "accumulating": true, "fee_pct": 0.3, "extra_fee_pct": 0.0, "fee_range": [0.3, 0.33], "tax_link": "usd", "us_share": 1.0, "confidence": "medium", "notes": "המקורות חלוקים על דמי הניהול: 0.30 או 0.33.", "sources": ["https://tradingil.co.il/קרן-אירית/", "https://moneyplan.co.il/irish-etf-exchange-traded-fund/"]}, {"tase_number": "1186063", "name": "Invesco NASDAQ-100 Swap UCITS ETF Acc", "tase_short_name": "אינבסקו.חוץ NASDAQ100SWAP", "issuer": "Invesco", "index": "NASDAQ 100", "category": "us_tech", "replication": "synthetic", "accumulating": true, "fee_pct": 0.2, "extra_fee_pct": 0.05, "fee_range": [0.2, 0.25], "tax_link": "unknown", "us_share": 1.0, "confidence": "medium", "notes": "המקורות חלוקים על העלות הכוללת. בסיס המס לא אומת.", "sources": ["https://tradingil.co.il/קרן-אירית/", "https://moneyplan.co.il/irish-etf-exchange-traded-fund/"]}, {"tase_number": "1159235", "name": "iShares MSCI ACWI UCITS ETF", "tase_short_name": "אשס.חוץ MS ACWI", "issuer": "iShares", "index": "MSCI ACWI", "category": "global_all", "replication": "physical", "accumulating": true, "fee_pct": 0.2, "extra_fee_pct": 0.0, "fee_range": [0.2, 0.2], "tax_link": "unknown", "us_share": 0.63, "confidence": "high", "notes": "מדינות מפותחות ומתפתחות. המקורות חלוקים על בסיס המס.", "sources": ["https://tradingil.co.il/קרן-אירית/", "https://moneyplan.co.il/irish-etf-exchange-traded-fund/"]}, {"tase_number": "1209220", "name": "Invesco FTSE All-World UCITS ETF", "tase_short_name": "אינ.חוץFTSEAW", "issuer": "Invesco", "index": "FTSE All-World", "category": "global_all", "replication": "physical", "accumulating": true, "fee_pct": 0.15, "extra_fee_pct": 0.0, "fee_range": [0.15, 0.15], "tax_link": "cpi", "us_share": 0.62, "confidence": "high", "notes": "מדינות מפותחות ומתפתחות.", "sources": ["https://tradingil.co.il/קרן-אירית/", "https://lazyinvestor.co.il/worldindex/"]}, {"tase_number": "1185164", "name": "Invesco MSCI World UCITS ETF Acc", "tase_short_name": "אינ.חוץ.WORLD", "issuer": "Invesco", "index": "MSCI World", "category": "global_developed", "replication": "synthetic", "accumulating": true, "fee_pct": 0.05, "extra_fee_pct": 0.03, "fee_range": [0.05, 0.19], "tax_link": "cpi", "us_share": 0.7, "confidence": "medium", "notes": "מדינות מפותחות בלבד, בלי שווקים מתפתחים. המקורות חלוקים על דמי הניהול: 0.05 ועוד SWAP, 0.08 או 0.19.", "sources": ["https://tradingil.co.il/קרן-אירית/", "https://lazyinvestor.co.il/worldindex/", "https://moneyplan.co.il/irish-etf-exchange-traded-fund/"]}, {"tase_number": "1159169", "name": "iShares Core MSCI EM IMI UCITS ETF", "tase_short_name": "אשס.חוץ MSCI EM", "issuer": "iShares", "index": "MSCI Emerging Markets IMI", "category": "emerging", "replication": "physical", "accumulating": true, "fee_pct": 0.18, "extra_fee_pct": 0.0, "fee_range": [0.18, 0.18], "tax_link": "unknown", "us_share": 0.0, "confidence": "high", "notes": "שווקים מתפתחים כולל חברות קטנות.", "sources": ["https://tradingil.co.il/קרן-אירית/", "https://moneyplan.co.il/irish-etf-exchange-traded-fund/"]}, {"tase_number": "1183490", "name": "Invesco MSCI Emerging Markets UCITS ETF", "tase_short_name": "", "issuer": "Invesco", "index": "MSCI Emerging Markets", "category": "emerging", "replication": "synthetic", "accumulating": true, "fee_pct": 0.09, "extra_fee_pct": 0.0, "fee_range": [0.09, 0.19], "tax_link": "unknown", "us_share": 0.0, "confidence": "medium", "notes": "המקורות חלוקים על דמי הניהול: 0.09 או 0.19.", "sources": ["https://tradingil.co.il/קרן-אירית/", "https://moneyplan.co.il/irish-etf-exchange-traded-fund/"]}, {"tase_number": "1159094", "name": "iShares Core MSCI Europe UCITS ETF EUR (Acc)", "tase_short_name": "", "issuer": "iShares", "index": "MSCI Europe", "category": "europe", "replication": "physical", "accumulating": true, "fee_pct": 0.12, "extra_fee_pct": 0.0, "fee_range": [0.12, 0.12], "tax_link": "unknown", "us_share": 0.0, "confidence": "high", "notes": "", "sources": ["https://tradingil.co.il/קרן-אירית/", "https://moneyplan.co.il/irish-etf-exchange-traded-fund/"]}, {"tase_number": "1185172", "name": "Invesco STOXX Europe 600 UCITS ETF Acc", "tase_short_name": "", "issuer": "Invesco", "index": "STOXX Europe 600", "category": "europe", "replication": "synthetic", "accumulating": true, "fee_pct": 0.19, "extra_fee_pct": 0.0, "fee_range": [0.19, 0.223], "tax_link": "unknown", "us_share": 0.0, "confidence": "medium", "notes": "המקורות חלוקים על העלות הכוללת.", "sources": ["https://tradingil.co.il/קרן-אירית/", "https://moneyplan.co.il/irish-etf-exchange-traded-fund/"]}, {"tase_number": "1206895", "name": "Invesco Russell 2000 UCITS ETF Acc", "tase_short_name": "", "issuer": "Invesco", "index": "Russell 2000", "category": "us_small", "replication": "synthetic", "accumulating": true, "fee_pct": 0.25, "extra_fee_pct": 0.0, "fee_range": [0.25, 0.25], "tax_link": "unknown", "us_share": 1.0, "confidence": "medium", "notes": "חברות קטנות בארה\"ב.", "sources": ["https://tradingil.co.il/קרן-אירית/", "https://moneyplan.co.il/irish-etf-exchange-traded-fund/"]}, {"tase_number": "1248376", "name": "iShares MSCI Global Semiconductors UCITS ETF", "tase_short_name": "", "issuer": "iShares", "index": "MSCI Global Semiconductors", "category": "sector", "replication": "physical", "accumulating": true, "fee_pct": 0.35, "extra_fee_pct": 0.0, "fee_range": [0.35, 0.35], "tax_link": "unknown", "us_share": 0.7, "confidence": "medium", "notes": "נרשמה למסחר ב-5.11.2026. קרן ענפית, תוספת לתיק ולא בסיס. שיעור ארה\"ב הוא הערכה גסה.", "sources": ["https://moneyplan.co.il/קרנות-סל-איריות-חדשות-בלאקרוק/", "https://shukist.co.il/article/1fc80b6d-67b5-41ec-aedf-7d3c0bf13f71"]}, {"tase_number": "1248368", "name": "iShares S&P 500 Energy Sector UCITS ETF", "tase_short_name": "", "issuer": "iShares", "index": "S&P 500 Energy", "category": "sector", "replication": "physical", "accumulating": true, "fee_pct": 0.15, "extra_fee_pct": 0.0, "fee_range": [0.15, 0.15], "tax_link": "unknown", "us_share": 1.0, "confidence": "medium", "notes": "נרשמה למסחר ב-5.11.2026. קרן ענפית, תוספת לתיק ולא בסיס.", "sources": ["https://moneyplan.co.il/קרנות-סל-איריות-חדשות-בלאקרוק/", "https://shukist.co.il/article/1fc80b6d-67b5-41ec-aedf-7d3c0bf13f71"]}, {"tase_number": "1248384", "name": "iShares MSCI India UCITS ETF", "tase_short_name": "", "issuer": "iShares", "index": "MSCI India", "category": "country", "replication": "physical", "accumulating": true, "fee_pct": 0.65, "extra_fee_pct": 0.0, "fee_range": [0.65, 0.65], "tax_link": "unknown", "us_share": 0.0, "confidence": "medium", "notes": "נרשמה למסחר ב-5.11.2026. קרן מדינה, תוספת לתיק ולא בסיס.", "sources": ["https://moneyplan.co.il/קרנות-סל-איריות-חדשות-בלאקרוק/", "https://shukist.co.il/article/1fc80b6d-67b5-41ec-aedf-7d3c0bf13f71"]}]}, "questionnaire": {"questions": [{"id": "horizon", "text": "בעוד כמה זמן תצטרכו את הכסף הזה?", "help": "טווח ההשקעה הוא השאלה הכי חשובה. ככל שיש יותר זמן, יש יותר זמן להתאושש מירידות.", "options": [{"id": "lt3", "text": "פחות מ-3 שנים", "points": 0}, {"id": "3to5", "text": "3 עד 5 שנים", "points": 1}, {"id": "5to10", "text": "5 עד 10 שנים", "points": 2}, {"id": "10to20", "text": "10 עד 20 שנה", "points": 3}, {"id": "gt20", "text": "יותר מ-20 שנה", "points": 4}]}, {"id": "drop", "text": "התיק שלכם ירד 30 אחוז בתוך כמה חודשים. מה תעשו?", "help": "ירידות כאלה קרו בעבר ויקרו שוב. התשובה הכנה חשובה יותר מהתשובה היפה.", "options": [{"id": "sell_all", "text": "מוכר הכל כדי לעצור את ההפסד", "points": 0}, {"id": "sell_some", "text": "מוכר חלק כדי לישון בשקט", "points": 1}, {"id": "hold", "text": "לא נוגע וממשיך כרגיל", "points": 3}, {"id": "buy", "text": "ממשיך להפקיד ואפילו מוסיף", "points": 4}]}, {"id": "emergency", "text": "יש לכם כרית ביטחון נזילה בצד?", "help": "כסף זמין להוצאות של כמה חודשים, שלא מושקע במניות.", "options": [{"id": "none", "text": "אין", "points": 0}, {"id": "lt3m", "text": "פחות מ-3 חודשי הוצאות", "points": 1}, {"id": "3to6m", "text": "3 עד 6 חודשי הוצאות", "points": 3}, {"id": "gt6m", "text": "יותר מ-6 חודשי הוצאות", "points": 4}]}, {"id": "income", "text": "כמה יציבה ההכנסה שלכם?", "help": "הכנסה יציבה מאפשרת להמשיך להפקיד גם כשהשוק יורד.", "options": [{"id": "unstable", "text": "לא יציבה או שאין כרגע", "points": 0}, {"id": "varies", "text": "משתנה מחודש לחודש", "points": 2}, {"id": "stable", "text": "יציבה", "points": 3}, {"id": "very_stable", "text": "יציבה מאוד ויש עודף חודשי קבוע", "points": 4}]}, {"id": "experience", "text": "מה הניסיון שלכם בשוק ההון?", "help": "אין תשובה לא נכונה. מי שמתחיל צריך פשוט תיק פשוט יותר.", "options": [{"id": "none", "text": "אף פעם לא השקעתי", "points": 1}, {"id": "some", "text": "יש לי קרן או פנסיה שאני עוקב אחריה", "points": 2}, {"id": "years", "text": "משקיע בעצמי כמה שנים", "points": 3}, {"id": "crisis", "text": "עברתי ירידה גדולה ולא מכרתי", "points": 4}]}, {"id": "share", "text": "איזה חלק מהחסכונות שלכם הכסף הזה?", "help": "ככל שזה חלק קטן יותר, ירידה בו פוגעת פחות.", "options": [{"id": "all", "text": "כמעט כל מה שיש לי", "points": 0}, {"id": "most", "text": "רוב החסכונות", "points": 1}, {"id": "half", "text": "בערך חצי", "points": 3}, {"id": "small", "text": "חלק קטן", "points": 4}]}, {"id": "goal", "text": "מה חשוב לכם יותר?", "help": "אין אפשרות שנותנת גם תשואה גבוהה וגם בלי ירידות.", "options": [{"id": "preserve", "text": "לא להפסיד, גם במחיר של תשואה נמוכה", "points": 0}, {"id": "balance", "text": "איזון בין צמיחה ליציבות", "points": 2}, {"id": "growth", "text": "צמיחה, ואני מקבל תנודות", "points": 3}, {"id": "max", "text": "מקסימום צמיחה לטווח ארוך, תנודות לא מפריעות לי", "points": 4}]}], "profiles": [{"id": "conservative", "name": "שמרני", "min_pct": 0, "equity_pct": 30, "tech_pct_of_equity": 10}, {"id": "moderate", "name": "מתון", "min_pct": 30, "equity_pct": 50, "tech_pct_of_equity": 10}, {"id": "balanced", "name": "מאוזן", "min_pct": 50, "equity_pct": 70, "tech_pct_of_equity": 15}, {"id": "growth", "name": "צמיחה", "min_pct": 68, "equity_pct": 85, "tech_pct_of_equity": 20}, {"id": "aggressive", "name": "אגרסיבי", "min_pct": 85, "equity_pct": 100, "tech_pct_of_equity": 25}], "caps": [{"question": "horizon", "option": "lt3", "max_equity_pct": 30, "warning": "טווח של פחות מ-3 שנים קצר מדי לחשיפה גבוהה למניות. החלק המנייתי הוגבל ל-30 אחוז."}, {"question": "horizon", "option": "3to5", "max_equity_pct": 50, "warning": "בטווח של 3 עד 5 שנים החלק המנייתי הוגבל ל-50 אחוז."}, {"question": "drop", "option": "sell_all", "max_equity_pct": 50, "warning": "מי שמוכר בירידה נועל הפסד. החלק המנייתי הוגבל ל-50 אחוז כדי שהירידות יהיו נסבלות."}], "warnings": [{"question": "emergency", "option": "none", "warning": "אין כרית ביטחון. מקובל לבנות קודם כרית נזילה ורק אחר כך להשקיע במניות."}, {"question": "income", "option": "unstable", "warning": "הכנסה לא יציבה מגדילה את הסיכוי שתצטרכו למשוך בזמן ירידה."}, {"question": "share", "option": "all", "warning": "כמעט כל החסכונות בתיק אחד. שווה לשקול להשאיר חלק בצד."}]}, "portfolios": {"solid_slot": {"id": "solid", "label": "רכיב סולידי", "note": "הרכיב הסולידי אינו חלק מהריפו הזה. למשל קרן כספית שקלית או אגח ממשלתי. בוחרים לבד."}, "templates": [{"id": "olami-ehad", "name": "עולמי אחד", "level": "מתחילים", "summary": "קרן אחת שמחזיקה אלפי חברות מכל העולם. הכי פשוט, אין מה לאזן.", "options": {"global_fund": {"label": "איזו קרן עולמית", "default": "1209220", "choices": {"1209220": "FTSE All-World, מפותחים ומתפתחים, עקיבה פיזית", "1159235": "MSCI ACWI, מפותחים ומתפתחים, עקיבה פיזית", "1185164": "MSCI World, מפותחים בלבד, עקיבה סינתטית"}}}}, {"id": "olami-plus-mitpatchim", "name": "עולמי מפותח ועוד מתפתחים", "level": "מתחילים", "summary": "קרן עולם מפותח זולה ולצדה קרן שווקים מתפתחים. 85 מול 15.", "legs": [{"slot": "developed", "label": "עולם מפותח", "fund": "1185164", "weight": 85}, {"slot": "emerging", "label": "שווקים מתפתחים", "fund": "1159169", "weight": 15}]}, {"id": "shlosha-ezorim", "name": "שלושה אזורים", "level": "בינוני", "summary": "ארה\"ב, אירופה ומתפתחים בנפרד. דומה למדד עולמי אבל דורש איזון פעם בשנה.", "legs": [{"slot": "us", "label": "ארה\"ב", "fund": "1159250", "weight": 60}, {"slot": "europe", "label": "אירופה", "fund": "1159094", "weight": 25}, {"slot": "emerging", "label": "שווקים מתפתחים", "fund": "1159169", "weight": 15}]}, {"id": "triathlon", "name": "טריאתלון", "level": "מתקדמים", "summary": "שלוש רגליים: טכנולוגיה, S&P 500 ועולמי. משקל הטכנולוגיה נקבע לפי רמת הסיכון.", "options": {"sp_variant": {"label": "רגל ה-S&P 500", "default": "regular", "choices": {"regular": "S&P 500 רגיל", "equal": "S&P 500 במשקל שווה", "hedged": "S&P 500 מנוטרל מטבע", "combined": "משולב: חצי רגיל וחצי משקל שווה"}}, "global_variant": {"label": "הרגל העולמית", "default": "all", "choices": {"all": "כל העולם", "ex_us": "עולם בלי ארה\"ב"}}}, "funds": {"tech": "1159243", "sp_regular": "1159250", "sp_equal": "1207208", "global_all": "1209220", "ex_us_europe": "1159094", "ex_us_emerging": "1159169"}, "ex_us_split": {"europe": 60, "emerging": 40}, "hedged_slot": {"id": "sp_hedged", "label": "S&P 500 מנוטרל מטבע", "note": "במחקר לא נמצאה קרן אירית מנוטרלת לשקל שנסחרת בתל אביב. האפשרויות הקיימות הן קרנות ישראליות מנוטרלות. בוחרים לבד ובודקים דמי ניהול."}, "ex_us_note": "במחקר לא נמצאה קרן אירית אחת של עולם בלי ארה\"ב בתל אביב. ההרכב כאן הוא אירופה ועוד מתפתחים, וחסרות בו יפן, קנדה ואוסטרליה."}]}};</script>
+<script>/* מנוע החישוב בצד הדפדפן. מראה של engine/core.py, נבדק מולו בבדיקות. */
+(function (root) {
+  "use strict";
+
+  function totalCostPct(fund) {
+    return Math.round((fund.fee_pct + fund.extra_fee_pct) * 10000) / 10000;
+  }
+
+  function fundsByNumber(fundsData) {
+    var map = {};
+    fundsData.funds.forEach(function (f) { map[f.tase_number] = f; });
+    return map;
+  }
+
+  function scoreRisk(answers, questionnaire) {
+    var score = 0, maxScore = 0;
+    questionnaire.questions.forEach(function (q) {
+      if (!(q.id in answers)) throw new Error("חסרה תשובה לשאלה: " + q.id);
+      var chosen = q.options.filter(function (o) { return o.id === answers[q.id]; });
+      if (!chosen.length) throw new Error("תשובה לא מוכרת לשאלה " + q.id);
+      score += chosen[0].points;
+      maxScore += Math.max.apply(null, q.options.map(function (o) { return o.points; }));
+    });
+    var pct = Math.floor(score * 100 / maxScore);
+    var profile = questionnaire.profiles[0];
+    questionnaire.profiles.forEach(function (p) { if (pct >= p.min_pct) profile = p; });
+    var equityPct = profile.equity_pct;
+    var warnings = [];
+    questionnaire.caps.forEach(function (cap) {
+      if (answers[cap.question] === cap.option && equityPct > cap.max_equity_pct) {
+        equityPct = cap.max_equity_pct;
+        warnings.push(cap.warning);
+      }
+    });
+    questionnaire.warnings.forEach(function (w) {
+      if (answers[w.question] === w.option) warnings.push(w.warning);
+    });
+    return {
+      score: score, max_score: maxScore, pct: pct,
+      profile_id: profile.id, profile_name: profile.name,
+      equity_pct: equityPct, tech_pct_of_equity: profile.tech_pct_of_equity,
+      warnings: warnings
+    };
+  }
+
+  function option(template, options, key) {
+    var spec = template.options[key];
+    var value = (options && key in options) ? options[key] : spec.default;
+    if (!(value in spec.choices)) throw new Error("ערך לא מוכר לאפשרות " + key);
+    return value;
+  }
+
+  function equityLegs(template, techPct, options) {
+    var notes = [], legs = [];
+    if (template.id === "olami-ehad") {
+      legs.push({ slot: "global", label: "עולמי", fund: option(template, options, "global_fund"), w4: 400 });
+      return { legs: legs, notes: notes };
+    }
+    if (template.id === "triathlon") {
+      if (techPct % 5 !== 0 || techPct < 0 || techPct > 50) {
+        throw new Error("משקל הטכנולוגיה חייב להיות כפולה של 5 בין 0 ל-50");
+      }
+      var f = template.funds, rest = 100 - techPct;
+      legs.push({ slot: "tech", label: "טכנולוגיה, נאסדק 100", fund: f.tech, w4: 4 * techPct });
+      var sp = option(template, options, "sp_variant");
+      if (sp === "regular") {
+        legs.push({ slot: "sp", label: "S&P 500 רגיל", fund: f.sp_regular, w4: 2 * rest });
+      } else if (sp === "equal") {
+        legs.push({ slot: "sp", label: "S&P 500 משקל שווה", fund: f.sp_equal, w4: 2 * rest });
+      } else if (sp === "hedged") {
+        var h = template.hedged_slot;
+        legs.push({ slot: h.id, label: h.label, fund: null, w4: 2 * rest });
+        notes.push(h.note);
+      } else {
+        legs.push({ slot: "sp", label: "S&P 500 רגיל", fund: f.sp_regular, w4: rest });
+        legs.push({ slot: "sp_equal", label: "S&P 500 משקל שווה", fund: f.sp_equal, w4: rest });
+      }
+      var gl = option(template, options, "global_variant");
+      if (gl === "all") {
+        legs.push({ slot: "global", label: "כל העולם", fund: f.global_all, w4: 2 * rest });
+      } else {
+        var split = template.ex_us_split;
+        legs.push({ slot: "europe", label: "אירופה", fund: f.ex_us_europe, w4: Math.floor(2 * rest * split.europe / 100) });
+        legs.push({ slot: "emerging", label: "שווקים מתפתחים", fund: f.ex_us_emerging, w4: Math.floor(2 * rest * split.emerging / 100) });
+        notes.push(template.ex_us_note);
+      }
+      return { legs: legs, notes: notes };
+    }
+    template.legs.forEach(function (l) {
+      legs.push({ slot: l.slot, label: l.label, fund: l.fund, w4: 4 * l.weight });
+    });
+    return { legs: legs, notes: notes };
+  }
+
+  function buildPortfolio(templateId, equityPct, techPct, portfolios, options) {
+    if (!Number.isInteger(equityPct) || equityPct < 0 || equityPct > 100) {
+      throw new Error("החלק המנייתי חייב להיות מספר שלם בין 0 ל-100");
+    }
+    var template = portfolios.templates.filter(function (t) { return t.id === templateId; })[0];
+    if (!template) throw new Error("תבנית לא מוכרת: " + templateId);
+    var res = equityLegs(template, techPct, options || {});
+    var legs = res.legs, notes = res.notes;
+    var raw = legs.map(function (l) { return l.w4 * equityPct; });
+    var weights = raw.map(function (r) { return Math.floor(r / 400); });
+    var leftover = equityPct - weights.reduce(function (a, b) { return a + b; }, 0);
+    var order = legs.map(function (_, i) { return i; }).sort(function (a, b) {
+      return (raw[b] % 400) - (raw[a] % 400) || a - b;
+    });
+    order.slice(0, leftover).forEach(function (i) { weights[i] += 1; });
+    var lines = [];
+    legs.forEach(function (l, i) {
+      if (weights[i] > 0) lines.push({ slot: l.slot, label: l.label, fund: l.fund, weight: weights[i] });
+    });
+    var solid = 100 - equityPct;
+    if (solid > 0) {
+      var s = portfolios.solid_slot;
+      lines.push({ slot: s.id, label: s.label, fund: null, weight: solid });
+      notes.push(s.note);
+    }
+    return { template_id: templateId, template_name: template.name, equity_pct: equityPct, lines: lines, notes: notes };
+  }
+
+  function portfolioStats(lines, fundsData) {
+    var byNum = fundsByNumber(fundsData), covered = 0, cost = 0, us = 0;
+    lines.forEach(function (line) {
+      var fund = line.fund ? byNum[line.fund] : null;
+      if (!fund) return;
+      covered += line.weight;
+      cost += line.weight * totalCostPct(fund);
+      us += line.weight * fund.us_share;
+    });
+    if (!covered) return { covered_weight: 0, weighted_cost_pct: 0, us_share_pct: 0 };
+    return {
+      covered_weight: covered,
+      weighted_cost_pct: Math.round(cost / covered * 10000) / 10000,
+      us_share_pct: Math.round(us / covered * 1000) / 10
+    };
+  }
+
+  function feeDrag(initial, monthly, years, grossReturnPct, feePct) {
+    if (!(years > 0) || initial < 0 || monthly < 0 || feePct < 0) throw new Error("קלט לא תקין");
+    function grow(annualPct) {
+      var rate = Math.pow(1 + annualPct / 100, 1 / 12) - 1, value = initial;
+      for (var i = 0; i < years * 12; i++) value = value * (1 + rate) + monthly;
+      return value;
+    }
+    var withoutFee = grow(grossReturnPct), withFee = grow(grossReturnPct - feePct);
+    function r2(x) { return Math.round(x * 100) / 100; }
+    return {
+      deposited: r2(initial + monthly * years * 12),
+      without_fee: r2(withoutFee), with_fee: r2(withFee),
+      lost_to_fees: r2(withoutFee - withFee)
+    };
+  }
+
+  var api = {
+    totalCostPct: totalCostPct, fundsByNumber: fundsByNumber, scoreRisk: scoreRisk,
+    buildPortfolio: buildPortfolio, portfolioStats: portfolioStats, feeDrag: feeDrag
+  };
+  if (typeof module !== "undefined" && module.exports) module.exports = api;
+  else root.IrishFunds = api;
+})(typeof window !== "undefined" ? window : globalThis);
+</script>
+<script>
+(function(){
+var D=window.IF_DATA,E=window.IrishFunds,Q=D.questionnaire.questions,answers={},i=0,risk=null,opts={};
+var byNum=E.fundsByNumber(D.funds);
+function el(t,a,txt){var e=document.createElement(t);for(var k in a||{})e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;}
+function $(id){return document.getElementById(id);}
+function renderQ(){
+  var q=Q[i],box=$('qbox');box.textContent='';
+  $('progress').textContent='שאלה '+(i+1)+' מתוך '+Q.length;
+  var fs=el('fieldset');fs.appendChild(el('legend',{},q.text));fs.appendChild(el('p',{'class':'help'},q.help));
+  q.options.forEach(function(o){
+    var lab=el('label',{'class':'opt'});var inp=el('input',{type:'radio',name:'q',value:o.id});
+    if(answers[q.id]===o.id)inp.checked=true;
+    lab.appendChild(inp);lab.appendChild(el('span',{},o.text));fs.appendChild(lab);
+  });
+  box.appendChild(fs);$('back').hidden=i===0;$('next').textContent=i===Q.length-1?'לתוצאה':'המשך';$('qerr').hidden=true;
+  var first=box.querySelector('input:checked')||box.querySelector('input');if(first&&i>0)first.focus();
+}
+$('quiz').addEventListener('submit',function(ev){
+  ev.preventDefault();var c=document.querySelector('input[name=q]:checked');
+  if(!c){$('qerr').hidden=false;return;}
+  answers[Q[i].id]=c.value;
+  if(i<Q.length-1){i++;renderQ();}else showResult();
+});
+$('back').addEventListener('click',function(){if(i>0){i--;renderQ();}});
+$('restart').addEventListener('click',function(){answers={};i=0;opts={};$('result').hidden=true;$('quiz').hidden=false;renderQ();window.scrollTo(0,0);});
+function showResult(){
+  risk=E.scoreRisk(answers,D.questionnaire);
+  $('quiz').hidden=true;$('result').hidden=false;
+  $('profile').textContent=risk.profile_name;
+  $('equity').textContent='חלק מנייתי לדוגמה: '+risk.equity_pct+' אחוז. השאר ברכיב סולידי.';
+  var w=$('warnings');w.textContent='';risk.warnings.forEach(function(t){w.appendChild(el('p',{'class':'warn'},t));});
+  var sel=$('template');sel.textContent='';
+  D.portfolios.templates.forEach(function(t){sel.appendChild(el('option',{value:t.id},t.name+' ('+t.level+')'));});
+  renderTemplate();$('profile').setAttribute('tabindex','-1');$('profile').focus();
+}
+$('template').addEventListener('change',function(){opts={};renderTemplate();});
+function renderTemplate(){
+  var t=D.portfolios.templates.filter(function(x){return x.id===$('template').value;})[0];
+  $('tsummary').textContent=t.summary;
+  var box=$('opts');box.textContent='';
+  Object.keys(t.options||{}).forEach(function(key){
+    var spec=t.options[key],id='opt_'+key;
+    box.appendChild(el('label',{'class':'fld','for':id},spec.label));
+    var s=el('select',{id:id});
+    Object.keys(spec.choices).forEach(function(c){var o=el('option',{value:c},spec.choices[c]);if((opts[key]||spec['default'])===c)o.selected=true;s.appendChild(o);});
+    s.addEventListener('change',function(){opts[key]=s.value;renderPortfolio(t);});
+    box.appendChild(s);
+  });
+  renderPortfolio(t);
+}
+function renderPortfolio(t){
+  var p=E.buildPortfolio(t.id,risk.equity_pct,risk.tech_pct_of_equity,D.portfolios,opts);
+  $('ptitle').textContent='תיק לדוגמה: '+p.template_name;
+  var L=$('lines');L.textContent='';
+  p.lines.forEach(function(line){
+    var f=line.fund?byNum[line.fund]:null;
+    var row=el('div',{'class':'row'});row.appendChild(el('div',{'class':'w'},line.weight+'%'));
+    var d=el('div');d.appendChild(el('div',{},line.label));
+    d.appendChild(el('div',{'class':'small'},f?f.name+' | מספר נייר '+f.tase_number+' | עלות '+E.totalCostPct(f)+'%':'בוחרים לבד'));
+    var bar=el('div',{'class':'bar','aria-hidden':'true'});bar.style.width=line.weight+'%';d.appendChild(bar);
+    row.appendChild(d);L.appendChild(row);
+  });
+  var s=E.portfolioStats(p.lines,D.funds);
+  $('stats').textContent=s.covered_weight?'עלות שנתית משוקללת על החלק המנייתי: '+s.weighted_cost_pct+'%. חשיפה משוערת לארה"ב בחלק המנייתי: '+s.us_share_pct+'%.':'';
+  var N=$('notes');N.textContent='';p.notes.forEach(function(n){N.appendChild(el('p',{'class':'warn'},n));});
+}
+renderQ();
+})();
+</script>
+</body>
+</html>
